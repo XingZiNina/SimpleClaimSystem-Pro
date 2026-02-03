@@ -14,3 +14,7 @@
 - Optimize the loading interface so that it looks simple yet sophisticated.
 
 - Upgrade the plugins it relies on to make them work better
+
+- Added support for SquareMap (user James-P-Bennett)
+
+- Optimize BlueMap display (user draugael)
