@@ -60,181 +60,112 @@ import fr.xyness.SCS.Support.*;
 import fr.xyness.SCS.Types.WorldMode;
 import net.md_5.bungee.api.ChatColor;
 
-/**
- * Main class to enable SimpleClaimSystem
- * This class provides some useful methods
- */
+
 public class SimpleClaimSystem extends JavaPlugin {
     
 	
     // ***************
     // *  Variables  *
     // ***************
-    
-	
-    /** Instance of ClaimDynmap for dynmap integration */
+
     private ClaimDynmap dynmapInstance;
-    
-    /** Instance of ClaimBluemap for Bluemap integration */
     private ClaimBluemap bluemapInstance;
-    
-    /** Instance of ClaimPl3xMap for Pl3xmap integration */
     private ClaimPl3xMap pl3xmapInstance;
-    
-    /** Instance of ClaimWorldguard for WorldGuard integration */
     private ClaimWorldGuard claimWorldguardInstance;
-    
-    /** Instance of ClaimVault for Vault integration */
     private ClaimVault claimVaultInstance;
-    
-    /** Instance of ClaimbStats for bStats integration */
     private ClaimbStats bStatsInstance;
-    
-    /** Instance of ClaimMain for claim data */
     private ClaimMain claimInstance;
-    
-    /** Instance of ClaimGuis for claim gui data */
     private ClaimGuis claimGuisInstance;
-    
-    /** Instance of ClaimSettings for plugin settings */
     private ClaimSettings claimSettingsInstance;
-    
-    /** Instance of ClaimLanguage for custom messages */
     private ClaimLanguage claimLanguageInstance;
-    
-    /** Instance of ClaimPurge for purge system */
     private ClaimPurge claimPurgeInstance;
-    
-    /** Instance of CPlayerMain for players data */
     private CPlayerMain cPlayerMainInstance;
-    
-    /** Instance of ClaimBossBar for players bossbar */
     private ClaimBossBar claimBossBarInstance;
-    
-    /** Instance of SimpleClaimSystem for useful methods */
     private SimpleClaimSystem instance;
-    
-    /** The version of the plugin */
-    private String Version = "1.12.3.3";
-    
-    /** Data source for database connections */
+    private String Version = "1.4";
     private HikariDataSource dataSource;
-    
-    /** Whether the server is using Folia */
     private boolean isFolia = false;
-    
-    /** Whether the server is using Paper/Purpur */
     private boolean isPaper = false;
-    
-    /** Minecraft version */
     private String minecraftVersion;
-    
-    /** Whether an update is available for the plugin */
     private boolean isUpdateAvailable;
-    
-    /** The update message */
     private String updateMessage;
-    
-    /** Console sender */
     private ConsoleCommandSender logger = Bukkit.getConsoleSender();
     
     
     // ******************
     // *  Main Methods  *
     // ******************
-    
-    
-    /**
-     * Called when the plugin is enabled.
-     */
+
     @Override
     public void onEnable() {
-        
-        // Register plugin instance
+
         this.instance = this;
-        
-        // Load config and send finale message
-        info("==========================================================================");
+
+        info("========================================= SCS =========================================");
+
         if (loadConfig(false, Bukkit.getConsoleSender())) {
             info(" ");
-            info("SimpleClaimSystem is enabled !");
-            info("Discord for support : https://discord.gg/6sRTGprM95");
-            info("Documentation : https://xyness.gitbook.io/simpleclaimsystem");
-            info("Developped by Xyness");
+            info("SimpleClaimSystem has been successfully enabled.");
+            info("Version: " + Version + " | Authors: Xyness, MingLi");
         } else {
             Bukkit.getServer().getPluginManager().disablePlugin(this);
         }
-        info("==========================================================================");
+
+        info("=====================================================================================");
     }
-    
-    /**
-     * Called when the plugin is disabled.
-     */
+
     @Override
     public void onDisable() {
         if (dataSource != null) {
             dataSource.close();
         }
-        // Disable players bossbar (prevent for /reload)
+
         Bukkit.getOnlinePlayers().forEach(p -> claimBossBarInstance.disableBossBar(p));
-        info("==========================================================================");
-        info("SimpleClaimSystem is disabled !");
-        info("Discord for support : https://discord.gg/6sRTGprM95");
-        info("Documentation : https://xyness.gitbook.io/simpleclaimsystem");
-        info("Developped by Xyness");
-        info("==========================================================================");
+
+        info("========================================= SCS =========================================");
+        info("SimpleClaimSystem has been disabled.");
+        info("Authors: Xyness, MingLi");
+        info("=====================================================================================");
     }
-    
-    /**
-     * Called when the plugin is loaded (only for WorldGuard support).
-     */
+
     @Override
     public void onLoad() {
         if (Bukkit.getPluginManager().getPlugin("WorldGuard") != null) {
-        	claimWorldguardInstance = new ClaimWorldGuard();
+            claimWorldguardInstance = new ClaimWorldGuard();
             claimWorldguardInstance.registerCustomFlag();
         }
     }
-    
-    
+
     // ********************
     // *  Other Methods   *
     // ********************
-    
-    
-    /**
-     * Loads or reloads the plugin configuration.
-     * 
-     * @param reload Whether to reload the configuration
-     * @return True if the configuration was loaded successfully, false otherwise
-     */
+
     public boolean loadConfig(boolean reload, CommandSender sender) {
-    	
-    	boolean[] status = {true};
-    	
-    	Runnable reloadTask = () -> {
-    		
+
+        boolean[] status = {true};
+
+        Runnable reloadTask = () -> {
+
             if (reload) {
-            	sender.sendMessage(getLanguage().getMessage("reload-attempt"));
-            	info("==========================================================================");
+                sender.sendMessage(getLanguage().getMessage("reload-attempt"));
+                info("========================================= SCS =========================================");
             }
-            
-            // Save and reload config
+
             saveDefaultConfig();
             reloadConfig();
-            
-        	// Message for console
+
+            info(" ");
             info(ChatColor.AQUA + "  ___   ___   ___ ");
             info(ChatColor.AQUA + " / __| / __| / __|  " + ChatColor.DARK_GREEN + "SimpleClaimSystem " + ChatColor.AQUA + "v" + Version);
+
             if(getConfig().getBoolean("check-for-updates")) {
-            	info(ChatColor.AQUA + " \\__ \\ ∣(__  \\__ \\  " + ChatColor.GRAY + checkForUpdates());
+                info(ChatColor.AQUA + " \\__ \\ ∣(__  \\__ \\  " + ChatColor.GRAY + checkForUpdates());
             } else {
-            	info(ChatColor.AQUA + " \\__ \\ ∣(__  \\__ \\  " + ChatColor.GRAY + "Updates checker is disabled");
-            } 
+                info(ChatColor.AQUA + " \\__ \\ ∣(__  \\__ \\  " + ChatColor.GRAY + "Updates checker is disabled");
+            }
             info(ChatColor.AQUA + " |___/ \\___| |___/  " + ChatColor.DARK_GRAY + "Running on " + Bukkit.getVersion());
             info(" ");
-            
-            // Unregister all handlers
+
             if(reload) {
                 HandlerList.unregisterAll(this);
                 claimInstance.clearAll();
@@ -251,39 +182,31 @@ public class SimpleClaimSystem extends JavaPlugin {
             	bStatsInstance = new ClaimbStats();
             	bStatsInstance.enableMetrics(this);
             }
-            
-            // Update config if necessary
+
             updateConfigWithDefaults();
-            // Check Folia
             checkFolia();
-            // Check Paper
             checkPaper();
-            // Check version of Minecraft
             checkMinecraftVersion();
-            
-            // Check GriefPrevention
+
             if (Bukkit.getPluginManager().getPlugin("GriefPrevention") != null) {
                 claimSettingsInstance.addSetting("griefprevention", "true");
             } else {
                 claimSettingsInstance.addSetting("griefprevention", "false");
             }
-            
-            // Check PlaceholderAPI
+
             if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
                 claimSettingsInstance.addSetting("placeholderapi", "true");
                 if(!reload) new ClaimPlaceholdersExpansion(this).register();
             } else {
                 claimSettingsInstance.addSetting("placeholderapi", "false");
             }
-            
-            // Check WorldGuard
+
             if (Bukkit.getPluginManager().getPlugin("WorldGuard") != null) {
                 claimSettingsInstance.addSetting("worldguard", "true");
             } else {
                 claimSettingsInstance.addSetting("worldguard", "false");
             }
-            
-            // Check Vault
+
             boolean[] check_vault = {false};
             if (Bukkit.getPluginManager().getPlugin("Vault") != null) {
             	claimVaultInstance = new ClaimVault();
@@ -296,32 +219,28 @@ public class SimpleClaimSystem extends JavaPlugin {
             } else {
                 claimSettingsInstance.addSetting("vault", "false");
             }
-            
-            // Check Floodgate
+
             Plugin floodgate = Bukkit.getPluginManager().getPlugin("floodgate");
             if (floodgate != null) {
                 claimSettingsInstance.addSetting("floodgate", "true");
             } else {
                 claimSettingsInstance.addSetting("floodgate", "false");
             }
-            
-            // Check Dynmap
+
             Plugin dynmap = Bukkit.getPluginManager().getPlugin("dynmap");
             if (dynmap != null) {
                 claimSettingsInstance.addSetting("dynmap", "true");
             } else {
                 claimSettingsInstance.addSetting("dynmap", "false");
             }
-            
-            // Check Bluemap
+
             Plugin bluemap = Bukkit.getPluginManager().getPlugin("bluemap");
             if (bluemap != null) {
                 claimSettingsInstance.addSetting("bluemap", "true");
             } else {
                 claimSettingsInstance.addSetting("bluemap", "false");
             }
-            
-            // Check Pl3xmap
+
             Plugin pl3xmap = Bukkit.getPluginManager().getPlugin("pl3xmap");
             if (pl3xmap != null) {
                 claimSettingsInstance.addSetting("pl3xmap", "true");
@@ -329,21 +248,17 @@ public class SimpleClaimSystem extends JavaPlugin {
                 claimSettingsInstance.addSetting("pl3xmap", "false");
             }
 
-            // Check "langs" folder
             File dossier = new File(getDataFolder(), "langs");
             if (!dossier.exists()) {
                 dossier.mkdirs();
             }
-            
-            // Add update settings
+
             claimSettingsInstance.addSetting("check-for-updates", getConfig().getString("check-for-updates"));
             claimSettingsInstance.addSetting("updates-notifications", getConfig().getString("updates-notifications"));
-            
-            // Check default language file for additions
+
             checkAndSaveResource("langs/en_US.yml");
             updateLangFileWithMissingKeys("en_US.yml");
-            
-            // Check custom language file
+
             String lang = getConfig().getString("lang");
             File custom = new File(getDataFolder() + File.separator + "langs", lang);
             if (!custom.exists()) {
@@ -353,8 +268,7 @@ public class SimpleClaimSystem extends JavaPlugin {
                 updateLangFileWithMissingKeys(lang);
             }
             claimSettingsInstance.addSetting("lang", lang);
-            
-            // Load selected language file
+
             File lang_final = new File(getDataFolder() + File.separator + "langs", lang);
             FileConfiguration config = YamlConfiguration.loadConfiguration(lang_final);
             Map<String, String> messages = new HashMap<>();
@@ -370,8 +284,7 @@ public class SimpleClaimSystem extends JavaPlugin {
                 messages.put(key, value);
             }
             claimLanguageInstance.setLanguage(messages);
-            
-            // Add default settings (before loading DB)
+
             Map<String,LinkedHashMap<String, Boolean>> defaultSettings = new HashMap<>();
             LinkedHashMap<String, Boolean> v = new LinkedHashMap<>();
             ConfigurationSection statusSettings = getConfig().getConfigurationSection("default-values-settings");
@@ -384,14 +297,11 @@ public class SimpleClaimSystem extends JavaPlugin {
             	defaultSettings.put(key.toLowerCase(), v);
             }
             claimSettingsInstance.setDefaultValues(defaultSettings);
-            
-            // Load guis
+
             loadGuis();
-            
-            // Check database
+
             String configC = getConfig().getString("database");
             if (configC.equalsIgnoreCase("true")) {
-                // Create data source
                 HikariConfig configH = new HikariConfig();
                 configH.setJdbcUrl("jdbc:mysql://" + getConfig().getString("database-settings.hostname") + ":" + getConfig().getString("database-settings.port") + "/" + getConfig().getString("database-settings.database_name"));
                 configH.setUsername(getConfig().getString("database-settings.username"));
@@ -504,8 +414,7 @@ public class SimpleClaimSystem extends JavaPlugin {
                     status[0] = false;
                     return;
                 }
-                
-                // Check new DB
+
                 String databasePath = "plugins/SimpleClaimSystem/claims.db";
                 File databaseFile = new File(databasePath);
 
@@ -514,8 +423,7 @@ public class SimpleClaimSystem extends JavaPlugin {
                 }
             }
             claimSettingsInstance.addSetting("database", configC);
-            
-            // Auto-purge settings
+
             configC = getConfig().getString("auto-purge");
             claimSettingsInstance.addSetting("auto-purge", configC);
             if (configC.equals("true")) {
@@ -544,8 +452,7 @@ public class SimpleClaimSystem extends JavaPlugin {
             		claimPurgeInstance.stopPurge();
             	}
             }
-            
-            // Aliases settings
+
             List<String> aliases_claim = getConfig().getStringList("command-aliases.claim");
             List<String> aliases_unclaim = getConfig().getStringList("command-aliases.unclaim");
             List<String> aliases_claims = getConfig().getStringList("command-aliases.claims");
@@ -573,16 +480,14 @@ public class SimpleClaimSystem extends JavaPlugin {
             for(String command : aliases_claims) {
             	claimSettingsInstance.addAliase(command, "/claims");
             }
-            
-            // Worlds aliases
+
             ConfigurationSection worldsAliasesSection = getConfig().getConfigurationSection("world-aliases");
             LinkedHashMap<String, String> worldsAliases = new LinkedHashMap<>();
             for (String key : worldsAliasesSection.getKeys(false)) {
                 worldsAliases.put(key, worldsAliasesSection.getString(key));
             }
             claimSettingsInstance.setWorldAliases(worldsAliases);
-            
-            // Add Dynmap settings
+
             configC = getConfig().getString("dynmap");
             if(configC.equalsIgnoreCase("true") && claimSettingsInstance.getBooleanSetting("dynmap")) {
                 if (!reload) {
@@ -599,8 +504,7 @@ public class SimpleClaimSystem extends JavaPlugin {
             claimSettingsInstance.addSetting("dynmap-claim-border-color", getConfig().getString("dynmap-settings.claim-border-color"));
             claimSettingsInstance.addSetting("dynmap-claim-fill-color", getConfig().getString("dynmap-settings.claim-fill-color"));
             claimSettingsInstance.addSetting("dynmap-claim-hover-text", getConfig().getString("dynmap-settings.claim-hover-text"));
-            
-            // Add Bluemap settings
+
             configC = getConfig().getString("bluemap");
             if(configC.equalsIgnoreCase("true") && claimSettingsInstance.getBooleanSetting("bluemap")) {
             	if(!reload) {
@@ -635,8 +539,7 @@ public class SimpleClaimSystem extends JavaPlugin {
             claimSettingsInstance.addSetting("pl3xmap-claim-border-color", getConfig().getString("pl3xmap-settings.claim-border-color"));
             claimSettingsInstance.addSetting("pl3xmap-claim-fill-color", getConfig().getString("pl3xmap-settings.claim-fill-color"));
             claimSettingsInstance.addSetting("pl3xmap-claim-hover-text", getConfig().getString("pl3xmap-settings.claim-hover-text"));
-            
-            // Add the message type for protection
+
             configC = getConfig().getString("protection-message");
             if (configC.equalsIgnoreCase("action_bar") || 
                     configC.equalsIgnoreCase("title") ||
@@ -648,8 +551,7 @@ public class SimpleClaimSystem extends JavaPlugin {
                 info(ChatColor.RED + "'protection-message' must be 'ACTION_BAR', 'TITLE', 'SUBTITLE', 'CHAT' or 'BOSSBAR'. Using default value.");
                 claimSettingsInstance.addSetting("protection-message", "ACTION_BAR");
             }
-            
-            // Claims mode
+
             ConfigurationSection worldsSection = getConfig().getConfigurationSection("claims-worlds-mode");
             LinkedHashMap<String, WorldMode> worlds = new LinkedHashMap<>();
             for (String key : worldsSection.getKeys(false)) {
@@ -666,8 +568,7 @@ public class SimpleClaimSystem extends JavaPlugin {
                 }
                 worlds.put(key, mode);
             }
-            
-            // Check for old disabled worlds setting
+
             if(getConfig().contains("worlds-disabled")) {
             	List<String> disabledWorlds = getConfig().getStringList("worlds-disabled");
             	for(String world : disabledWorlds) {
@@ -677,67 +578,35 @@ public class SimpleClaimSystem extends JavaPlugin {
             	getConfig().set("worlds-disabled", null);
             }
             claimSettingsInstance.setWorlds(worlds);
-            
-            // Check the keep chunks loaded
-            claimSettingsInstance.addSetting("keep-chunks-loaded", getConfig().getString("keep-chunks-loaded"));
-            
-            // Check the max length of the claim name
-            claimSettingsInstance.addSetting("max-length-claim-name", getConfig().getString("max-length-claim-name"));
-            
-            // Check the max length of the claim description
-            claimSettingsInstance.addSetting("max-length-claim-description", getConfig().getString("max-length-claim-description"));
-            
-            // Add invitations system setting
-            claimSettingsInstance.addSetting("claim-invitations-system", getConfig().getString("claim-invitations-system"));
-            
-            // Add invitation expiration delay setting
-            claimSettingsInstance.addSetting("claim-invitation-expiration-delay", getConfig().getString("claim-invitation-expiration-delay"));
-            
-            // Add confirmation check setting
-            claimSettingsInstance.addSetting("claim-confirmation", getConfig().getString("claim-confirmation"));
-            
-            // Add claim particles setting
-            claimSettingsInstance.addSetting("claim-particles", getConfig().getString("claim-particles"));
-            
-            // Add claim particles not enter setting
-            claimSettingsInstance.addSetting("claim-particles-not-enter", getConfig().getString("claim-particles-not-enter"));
-            
-            // Add claim fly disabled on damage setting
-            claimSettingsInstance.addSetting("claim-fly-disabled-on-damage", getConfig().getString("claim-fly-disabled-on-damage"));
-            
-            // Add claim fly message setting
-            claimSettingsInstance.addSetting("claim-fly-message-auto-fly", getConfig().getString("claim-fly-message-auto-fly"));
-            
-            // Check if enter/leave messages in a claim in the action bar are enabled
-            claimSettingsInstance.addSetting("enter-leave-messages", getConfig().getString("enter-leave-messages"));
-            
-            // Check if enter/leave messages in a claim in the title/subtitle are enabled
-            claimSettingsInstance.addSetting("enter-leave-title-messages", getConfig().getString("enter-leave-title-messages"));
-            
-            // Check if enter/leave messages in a claim in the chat are enabled
-            claimSettingsInstance.addSetting("enter-leave-chat-messages", getConfig().getString("enter-leave-chat-messages"));
-            
-            // Check if claims where Visitors is false are displayed in the /claims GUI
-            claimSettingsInstance.addSetting("claims-visitors-off-visible", getConfig().getString("claims-visitors-off-visible"));
 
-            // Description regex
+            claimSettingsInstance.addSetting("keep-chunks-loaded", getConfig().getString("keep-chunks-loaded"));
+            claimSettingsInstance.addSetting("max-length-claim-name", getConfig().getString("max-length-claim-name"));
+            claimSettingsInstance.addSetting("max-length-claim-description", getConfig().getString("max-length-claim-description"));
+            claimSettingsInstance.addSetting("claim-invitations-system", getConfig().getString("claim-invitations-system"));
+            claimSettingsInstance.addSetting("claim-invitation-expiration-delay", getConfig().getString("claim-invitation-expiration-delay"));
+            claimSettingsInstance.addSetting("claim-confirmation", getConfig().getString("claim-confirmation"));
+            claimSettingsInstance.addSetting("claim-particles", getConfig().getString("claim-particles"));
+            claimSettingsInstance.addSetting("claim-particles-not-enter", getConfig().getString("claim-particles-not-enter"));
+            claimSettingsInstance.addSetting("claim-fly-disabled-on-damage", getConfig().getString("claim-fly-disabled-on-damage"));
+            claimSettingsInstance.addSetting("claim-fly-message-auto-fly", getConfig().getString("claim-fly-message-auto-fly"));
+            claimSettingsInstance.addSetting("enter-leave-messages", getConfig().getString("enter-leave-messages"));
+            claimSettingsInstance.addSetting("enter-leave-title-messages", getConfig().getString("enter-leave-title-messages"));
+            claimSettingsInstance.addSetting("enter-leave-chat-messages", getConfig().getString("enter-leave-chat-messages"));
+            claimSettingsInstance.addSetting("claims-visitors-off-visible", getConfig().getString("claims-visitors-off-visible"));
             claimSettingsInstance.addSetting("description-regex.claims", getConfig().getString("description-regex.claims"));
             claimSettingsInstance.addSetting("description-regex.protected-areas", getConfig().getString("description-regex.protected-areas"));
-            
-            // Check claim fly disabled or not for Folia
+
             if(isFolia) {
             	info(ChatColor.RED + "'/claim fly' command disabled because the server is running on Folia.");
             }
-            
-            // Check where the auto-map is sent
+
             configC = getConfig().getString("map-type").toLowerCase();
             if(configC.equals("scoreboard") && isFolia) {
             	info(ChatColor.RED + "'map-type' set to 'CHAT' because the server is running on Folia.");
             	configC = "chat";
             }
             claimSettingsInstance.addSetting("map-type", configC);
-            
-            // Add economy settings
+
             if (check_vault[0]) {
                 claimSettingsInstance.addSetting("economy", getConfig().getString("economy"));
                 claimSettingsInstance.addSetting("max-sell-price", getConfig().getString("max-sell-price"));
@@ -749,8 +618,7 @@ public class SimpleClaimSystem extends JavaPlugin {
             } else {
                 claimSettingsInstance.addSetting("economy", "false");
             }
-            
-            // Add announce sale settings
+
             claimSettingsInstance.addSetting("announce-sale.bossbar", getConfig().getString("announce-sale.bossbar"));
             String barColor = getConfig().getString("announce-sale.bossbar-settings.color").toUpperCase();
             try {
@@ -779,11 +647,9 @@ public class SimpleClaimSystem extends JavaPlugin {
             claimSettingsInstance.addSetting("announce-sale.chat", getConfig().getString("announce-sale.chat"));
             claimSettingsInstance.addSetting("announce-sale.title", getConfig().getString("announce-sale.title"));
             claimSettingsInstance.addSetting("announce-sale.actionbar", getConfig().getString("announce-sale.actionbar"));
-            
-            // Add bossbar settings
+
             configC = getConfig().getString("bossbar");
             claimSettingsInstance.addSetting("bossbar", configC);
-            // Load bossbar settings
             barColor = getConfig().getString("bossbar-settings.color").toUpperCase();
             try {
             	BarColor color = BarColor.valueOf(barColor);
@@ -808,11 +674,9 @@ public class SimpleClaimSystem extends JavaPlugin {
             }
             claimSettingsInstance.addSetting("bossbar-color", barColor);
             claimSettingsInstance.addSetting("bossbar-style", barStyle);
-            
-            // Add teleportation delay moving setting
+
             claimSettingsInstance.addSetting("teleportation-delay-moving", getConfig().getString("teleportation-delay-moving"));
-            
-            // Expulsion location
+
             if(getConfig().contains("expulsion-location")) {
             	if (getConfig().getConfigurationSection("expulsion-location").getKeys(false).isEmpty()) {
             		info(ChatColor.RED + "'expulsion-location' : don't forget to set it with /scs setexpulsionlocation.");
@@ -855,14 +719,10 @@ public class SimpleClaimSystem extends JavaPlugin {
             }
             claimSettingsInstance.setGroups(groups);
             claimSettingsInstance.setGroupsSettings(groupsSettings);
-            
-            // Register listener for entering/leaving claims
+
             getServer().getPluginManager().registerEvents(new ClaimEventsEnterLeave(this), this);
-            
-            // Register listener for guis
             getServer().getPluginManager().registerEvents(new ClaimGuiEvents(this), this);
-            
-            // Register other listeners
+
             if(isFolia) {
             	getServer().getPluginManager().registerEvents(new FoliaClaimEvents(this), this);
             } else if(isPaper) {
@@ -870,65 +730,41 @@ public class SimpleClaimSystem extends JavaPlugin {
             } else {
             	getServer().getPluginManager().registerEvents(new SpigotClaimEvents(this), this);
             }
-            
-            // Add enabled/disabled settings
+
             v = new LinkedHashMap<>();
             statusSettings = getConfig().getConfigurationSection("status-settings");
             for (String key : statusSettings.getKeys(false)) {
                 v.put(key, statusSettings.getBoolean(key));
             }
             claimSettingsInstance.setEnabledSettings(v);
-            
-            // Add enabled/disabled settings
+
             v = new LinkedHashMap<>();
             statusSettings = getConfig().getConfigurationSection("permissions-on-SurvivalRequiringClaims");
             for (String key : statusSettings.getKeys(false)) {
                 v.put(key, statusSettings.getBoolean(key));
             }
             claimSettingsInstance.setSurvivalRequiringClaimsSettings(v);
-            
-            // Add blocked items
             claimSettingsInstance.setRestrictedItems(getConfig().getStringList("blocked-items"));
-            
-            // Add blocked containers
             claimSettingsInstance.setRestrictedContainers(getConfig().getStringList("blocked-interact-blocks"));
-            
-            // Add blocked entities
             claimSettingsInstance.setRestrictedEntityType(getConfig().getStringList("blocked-entities"));
-            
-            // Add special blocks
             claimSettingsInstance.setSpecialBlocks(getConfig().getStringList("special-blocks"));
-            
-            // Add ignored break blocks
             claimSettingsInstance.setBreakBlocksIgnore(getConfig().getStringList("ignored-break-blocks"));
-            
-            // Add ignored place blocks
             claimSettingsInstance.setPlaceBlocksIgnore(getConfig().getStringList("ignored-place-blocks"));
-            
-            // Register protection listener
+
             getServer().getPluginManager().registerEvents(new ClaimEvents(this), this);
-            
-            // Register commands
             getCommand("claim").setExecutor(new ClaimCommand(this));
             getCommand("unclaim").setExecutor(new UnclaimCommand(this));
             getCommand("scs").setExecutor(new ScsCommand(this));
             getCommand("claims").setExecutor(new ClaimsCommand(this));
             getCommand("protectedarea").setExecutor(new ProtectedAreaCommand(this));
-            
-            // Save config
+
             saveConfig();
             reloadConfig();
-            
-            // Load bossbar default settings
-            claimBossBarInstance.loadBossbarSettings();
 
-            // Load claims system
+            claimBossBarInstance.loadBossbarSettings();
             claimInstance.loadClaims();
-            
-            // Load players
             cPlayerMainInstance.loadPlayers();
-            
-            // Add player settings
+
             ConfigurationSection playersSection = getConfig().getConfigurationSection("players");
             Map<UUID, Map<String, Double>> playersSettings = new HashMap<>();
             for (String key : playersSection.getKeys(false)) {
@@ -951,8 +787,7 @@ public class SimpleClaimSystem extends JavaPlugin {
                 }
             }
             cPlayerMainInstance.setPlayersConfigSettings(playersSettings);
-            
-            // Add players setting and active their bossbar (/reload prevention)
+
             if(isFolia) {
                 Bukkit.getOnlinePlayers().forEach(p -> {
                 	cPlayerMainInstance.addPlayerPermSetting(p);
@@ -984,12 +819,7 @@ public class SimpleClaimSystem extends JavaPlugin {
         
         return status[0];
     }
-    
-    /**
-     * Loads or reloads the plugin configuration.
-     * 
-     * @return True if the configuration was loaded successfully, false otherwise
-     */
+
     public boolean reloadOnlyConfig(CommandSender sender) {
     	
     	boolean[] status = {true};
@@ -998,20 +828,15 @@ public class SimpleClaimSystem extends JavaPlugin {
     		
     		sender.sendMessage(getLanguage().getMessage("config-reload-attempt"));
     		info("==========================================================================");
-    		
-    		// Save and reload config
+
             saveDefaultConfig();
             reloadConfig();
-            
-            // Clear bossbars
+
             claimBossBarInstance.clearAll();
-            
-            // Update config if necessary
+
             updateConfigWithDefaults();
-            // Check Folia
             checkFolia();
-            
-            // Check Vault
+
             boolean check_vault = false;
             if (Bukkit.getPluginManager().getPlugin("Vault") != null) {
             	claimVaultInstance = new ClaimVault();
@@ -1025,21 +850,17 @@ public class SimpleClaimSystem extends JavaPlugin {
                 claimSettingsInstance.addSetting("vault", "false");
             }
 
-            // Check "langs" folder
             File dossier = new File(getDataFolder(), "langs");
             if (!dossier.exists()) {
                 dossier.mkdirs();
             }
-            
-            // Add update settings
+
             claimSettingsInstance.addSetting("check-for-updates", getConfig().getString("check-for-updates"));
             claimSettingsInstance.addSetting("updates-notifications", getConfig().getString("updates-notifications"));
-            
-            // Check default language file for additions
+
             checkAndSaveResource("langs/en_US.yml");
             updateLangFileWithMissingKeys("en_US.yml");
-            
-            // Check custom language file
+
             String lang = getConfig().getString("lang");
             File custom = new File(getDataFolder() + File.separator + "langs", lang);
             if (!custom.exists()) {
@@ -1049,8 +870,7 @@ public class SimpleClaimSystem extends JavaPlugin {
                 updateLangFileWithMissingKeys(lang);
             }
             claimSettingsInstance.addSetting("lang", lang);
-            
-            // Load selected language file
+
             File lang_final = new File(getDataFolder() + File.separator + "langs", lang);
             FileConfiguration config = YamlConfiguration.loadConfiguration(lang_final);
             Map<String, String> messages = new HashMap<>();
@@ -1066,8 +886,7 @@ public class SimpleClaimSystem extends JavaPlugin {
                 messages.put(key, value);
             }
             claimLanguageInstance.setLanguage(messages);
-            
-            // Add default settings (before loading DB)
+
             Map<String,LinkedHashMap<String, Boolean>> defaultSettings = new HashMap<>();
             LinkedHashMap<String, Boolean> v = new LinkedHashMap<>();
             ConfigurationSection statusSettings = getConfig().getConfigurationSection("default-values-settings");
@@ -1080,11 +899,9 @@ public class SimpleClaimSystem extends JavaPlugin {
             	defaultSettings.put(key.toLowerCase(), v);
             }
             claimSettingsInstance.setDefaultValues(defaultSettings);
-            
-            // Check database
+
             String configC = getConfig().getString("database");
             if (configC.equalsIgnoreCase("true")) {
-                // Create data source
                 HikariConfig configH = new HikariConfig();
                 configH.setJdbcUrl("jdbc:mysql://" + getConfig().getString("database-settings.hostname") + ":" + getConfig().getString("database-settings.port") + "/" + getConfig().getString("database-settings.database_name"));
                 configH.setUsername(getConfig().getString("database-settings.username"));
@@ -1191,8 +1008,7 @@ public class SimpleClaimSystem extends JavaPlugin {
                     status[0] = false;
                     return;
                 }
-                
-                // Check new DB
+
                 String databasePath = "plugins/SimpleClaimSystem/claims.db";
                 File databaseFile = new File(databasePath);
 
@@ -1231,8 +1047,7 @@ public class SimpleClaimSystem extends JavaPlugin {
             		claimPurgeInstance.stopPurge();
             	}
             }
-            
-            // Aliases settings
+
             List<String> aliases_claim = getConfig().getStringList("command-aliases.claim");
             List<String> aliases_unclaim = getConfig().getStringList("command-aliases.unclaim");
             List<String> aliases_claims = getConfig().getStringList("command-aliases.claims");
@@ -1260,23 +1075,17 @@ public class SimpleClaimSystem extends JavaPlugin {
             for(String command : aliases_claims) {
             	claimSettingsInstance.addAliase(command, "/claims");
             }
-            
-            // Add Dynmap settings
+
             claimSettingsInstance.addSetting("dynmap-claim-border-color", getConfig().getString("dynmap-settings.claim-border-color"));
             claimSettingsInstance.addSetting("dynmap-claim-fill-color", getConfig().getString("dynmap-settings.claim-fill-color"));
             claimSettingsInstance.addSetting("dynmap-claim-hover-text", getConfig().getString("dynmap-settings.claim-hover-text"));
-            
-            // Add Bluemap settings
             claimSettingsInstance.addSetting("bluemap-claim-border-color", getConfig().getString("bluemap-settings.claim-border-color"));
             claimSettingsInstance.addSetting("bluemap-claim-fill-color", getConfig().getString("bluemap-settings.claim-fill-color"));
             claimSettingsInstance.addSetting("bluemap-claim-hover-text", getConfig().getString("bluemap-settings.claim-hover-text"));
-            
-            // Add Pl3xmap settings
             claimSettingsInstance.addSetting("pl3xmap-claim-border-color", getConfig().getString("pl3xmap-settings.claim-border-color"));
             claimSettingsInstance.addSetting("pl3xmap-claim-fill-color", getConfig().getString("pl3xmap-settings.claim-fill-color"));
             claimSettingsInstance.addSetting("pl3xmap-claim-hover-text", getConfig().getString("pl3xmap-settings.claim-hover-text"));
-            
-            // Add the message type for protection
+
             configC = getConfig().getString("protection-message");
             if (configC.equalsIgnoreCase("action_bar") || 
                     configC.equalsIgnoreCase("title") ||
@@ -1288,8 +1097,7 @@ public class SimpleClaimSystem extends JavaPlugin {
                 info(ChatColor.RED + "'protection-message' must be 'ACTION_BAR', 'TITLE', 'SUBTITLE', 'CHAT' or 'BOSSBAR'. Using default value.");
                 claimSettingsInstance.addSetting("protection-message", "ACTION_BAR");
             }
-            
-            // Claims mode
+
             ConfigurationSection worldsSection = getConfig().getConfigurationSection("claims-worlds-mode");
             LinkedHashMap<String, WorldMode> worlds = new LinkedHashMap<>();
             for (String key : worldsSection.getKeys(false)) {
@@ -1306,8 +1114,7 @@ public class SimpleClaimSystem extends JavaPlugin {
                 }
                 worlds.put(key, mode);
             }
-            
-            // Check for old disabled worlds setting
+
             if(getConfig().contains("worlds-disabled")) {
             	List<String> disabledWorlds = getConfig().getStringList("worlds-disabled");
             	for(String world : disabledWorlds) {
@@ -1317,63 +1124,46 @@ public class SimpleClaimSystem extends JavaPlugin {
             	getConfig().set("worlds-disabled", null);
             }
             claimSettingsInstance.setWorlds(worlds);
-            
-            // Check the keep chunks loaded
+
             claimSettingsInstance.addSetting("keep-chunks-loaded", getConfig().getString("keep-chunks-loaded"));
-            
-            // Check the max length of the claim name
+
             claimSettingsInstance.addSetting("max-length-claim-name", getConfig().getString("max-length-claim-name"));
-            
-            // Check the max length of the claim description
+
             claimSettingsInstance.addSetting("max-length-claim-description", getConfig().getString("max-length-claim-description"));
-            
-            // Add invitations system setting
+
             claimSettingsInstance.addSetting("claim-invitations-system", getConfig().getString("claim-invitations-system"));
-            
-            // Add invitation expiration delay setting
+
             claimSettingsInstance.addSetting("claim-invitation-expiration-delay", getConfig().getString("claim-invitation-expiration-delay"));
-            
-            // Add confirmation check setting
+
             claimSettingsInstance.addSetting("claim-confirmation", getConfig().getString("claim-confirmation"));
-            
-            // Add claim particles setting
+
             claimSettingsInstance.addSetting("claim-particles", getConfig().getString("claim-particles"));
-            
-            // Add claim particles not enter setting
+
             claimSettingsInstance.addSetting("claim-particles-not-enter", getConfig().getString("claim-particles-not-enter"));
-            
-            // Add claim fly disabled on damage setting
+
             claimSettingsInstance.addSetting("claim-fly-disabled-on-damage", getConfig().getString("claim-fly-disabled-on-damage"));
-            
-            // Add claim fly message setting
+
             claimSettingsInstance.addSetting("claim-fly-message-auto-fly", getConfig().getString("claim-fly-message-auto-fly"));
-            
-            // Check if enter/leave messages in a claim in the action bar are enabled
+
             claimSettingsInstance.addSetting("enter-leave-messages", getConfig().getString("enter-leave-messages"));
-            
-            // Check if enter/leave messages in a claim in the title/subtitle are enabled
+
             claimSettingsInstance.addSetting("enter-leave-title-messages", getConfig().getString("enter-leave-title-messages"));
-            
-            // Check if enter/leave messages in a claim in the chat are enabled
+
             claimSettingsInstance.addSetting("enter-leave-chat-messages", getConfig().getString("enter-leave-chat-messages"));
-            
-            // Check if claims where Visitors is false are displayed in the /claims GUI
+
             claimSettingsInstance.addSetting("claims-visitors-off-visible", getConfig().getString("claims-visitors-off-visible"));
-            
-            // Check claim fly disabled or not for Folia
+
             if(isFolia) {
             	info(ChatColor.RED + "'/claim fly' command disabled because the server is running on Folia.");
             }
-            
-            // Check where the auto-map is sent
+
             configC = getConfig().getString("map-type").toLowerCase();
             if(configC.equals("scoreboard") && isFolia) {
             	info(ChatColor.RED + "'map-type' set to 'CHAT' because the server is running on Folia.");
             	configC = "chat";
             }
             claimSettingsInstance.addSetting("map-type", configC);
-            
-            // Add economy settings
+
             if (check_vault) {
                 claimSettingsInstance.addSetting("economy", getConfig().getString("economy"));
                 claimSettingsInstance.addSetting("max-sell-price", getConfig().getString("max-sell-price"));
@@ -1385,8 +1175,7 @@ public class SimpleClaimSystem extends JavaPlugin {
             } else {
                 claimSettingsInstance.addSetting("economy", "false");
             }
-            
-            // Add announce sale settings
+
             claimSettingsInstance.addSetting("announce-sale.bossbar", getConfig().getString("announce-sale.bossbar"));
             String barColor = getConfig().getString("announce-sale.bossbar-settings.color").toUpperCase();
             try {
@@ -1415,11 +1204,9 @@ public class SimpleClaimSystem extends JavaPlugin {
             claimSettingsInstance.addSetting("announce-sale.chat", getConfig().getString("announce-sale.chat"));
             claimSettingsInstance.addSetting("announce-sale.title", getConfig().getString("announce-sale.title"));
             claimSettingsInstance.addSetting("announce-sale.actionbar", getConfig().getString("announce-sale.actionbar"));
-            
-            // Add bossbar settings
+
             configC = getConfig().getString("bossbar");
             claimSettingsInstance.addSetting("bossbar", configC);
-            // Load bossbar settings
             barColor = getConfig().getString("bossbar-settings.color").toUpperCase();
             try {
             	BarColor color = BarColor.valueOf(barColor);
@@ -1444,11 +1231,9 @@ public class SimpleClaimSystem extends JavaPlugin {
             }
             claimSettingsInstance.addSetting("bossbar-color", barColor);
             claimSettingsInstance.addSetting("bossbar-style", barStyle);
-            
-            // Add teleportation delay moving setting
+
             claimSettingsInstance.addSetting("teleportation-delay-moving", getConfig().getString("teleportation-delay-moving"));
-            
-            // Expulsion location
+
             if(getConfig().contains("expulsion-location")) {
             	if (getConfig().getConfigurationSection("expulsion-location").getKeys(false).isEmpty()) {
             		info(ChatColor.RED + "'expulsion-location' : don't forget to set it with /scs setexpulsionlocation.");
@@ -1468,8 +1253,7 @@ public class SimpleClaimSystem extends JavaPlugin {
 	                claimSettingsInstance.setExpulsionLocation(location);
             	}
             }
-            
-            // Add group settings
+
             ConfigurationSection groupsSection = getConfig().getConfigurationSection("groups");
             LinkedHashMap<String, String> groups = new LinkedHashMap<>();
             Map<String, Map<String, Double>> groupsSettings = new HashMap<>();
@@ -1515,49 +1299,38 @@ public class SimpleClaimSystem extends JavaPlugin {
                 }
             }
             cPlayerMainInstance.setPlayersConfigSettings(playersSettings);
-            
-            // Add enabled/disabled settings
+
             v = new LinkedHashMap<>();
             statusSettings = getConfig().getConfigurationSection("status-settings");
             for (String key : statusSettings.getKeys(false)) {
                 v.put(key, statusSettings.getBoolean(key));
             }
             claimSettingsInstance.setEnabledSettings(v);
-            
-            // Add enabled/disabled settings
+
             v = new LinkedHashMap<>();
             statusSettings = getConfig().getConfigurationSection("permissions-on-SurvivalRequiringClaims");
             for (String key : statusSettings.getKeys(false)) {
                 v.put(key, statusSettings.getBoolean(key));
             }
             claimSettingsInstance.setSurvivalRequiringClaimsSettings(v);
-            
-            // Add blocked items
+
             claimSettingsInstance.setRestrictedItems(getConfig().getStringList("blocked-items"));
-            
-            // Add blocked containers
+
             claimSettingsInstance.setRestrictedContainers(getConfig().getStringList("blocked-interact-blocks"));
-            
-            // Add blocked entities
+
             claimSettingsInstance.setRestrictedEntityType(getConfig().getStringList("blocked-entities"));
-            
-            // Add special blocks
+
             claimSettingsInstance.setSpecialBlocks(getConfig().getStringList("special-blocks"));
-            
-            // Add ignored break blocks
+
             claimSettingsInstance.setBreakBlocksIgnore(getConfig().getStringList("ignored-break-blocks"));
-            
-            // Add ignored place blocks
+
             claimSettingsInstance.setPlaceBlocksIgnore(getConfig().getStringList("ignored-place-blocks"));
 
-            // Save config
             saveConfig();
             reloadConfig();
-            
-            // Load bossbar default settings
+
             claimBossBarInstance.loadBossbarSettings();
-            
-            // Add players setting and active their bossbar (/reload prevention)
+
             if(isFolia) {
                 Bukkit.getOnlinePlayers().forEach(p -> {
                 	cPlayerMainInstance.addPlayerPermSetting(p);
@@ -1583,63 +1356,23 @@ public class SimpleClaimSystem extends JavaPlugin {
         
         return status[0];
     }
-    
-    /**
-     * Returns the data source for database connections.
-     * 
-     * @return The data source
-     */
+
     public HikariDataSource getDataSource() { return dataSource; }
-    
-    /**
-     * Send a log
-     * 
-     * @param msg The log to send
-     */
+
     public void info(String msg) {
     	logger.sendMessage(msg);
     }
-    
-    /**
-     * Checks if the server is using Folia.
-     * 
-     * @return True if the server is using Folia, false otherwise
-     */
+
     public boolean isFolia() { return isFolia; }
-    
-    /**
-     * Checks if the server is using Paper.
-     * 
-     * @return True if the server is using Paper, false otherwise
-     */
+
     public boolean isPaper() { return isPaper; }
-    
-    /**
-     * Gets the Minecraft version.
-     * 
-     * @return The Minecraft version.
-     */
+
     public String getMinecraftVersion() { return minecraftVersion; }
-    
-    /**
-     * Returns the update message.
-     * 
-     * @return The update message
-     */
+
     public String getUpdateMessage() { return updateMessage; }
-    
-    /**
-     * Checks if an update is available for the 
-     * 
-     * @return True if an update is available, false otherwise
-     */
+
     public boolean isUpdateAvailable() { return isUpdateAvailable; }
-    
-    /**
-     * Executes a task asynchronously.
-     * 
-     * @param gTask The task to execute
-     */
+
     public void executeAsync(Runnable gTask) {
         if (isFolia) {
             Bukkit.getAsyncScheduler().runNow(this, task -> gTask.run());
@@ -1647,13 +1380,7 @@ public class SimpleClaimSystem extends JavaPlugin {
             Bukkit.getScheduler().runTaskAsynchronously(this, gTask);
         }
     }
-    
-    /**
-     * Executes a task asynchronously at a location (for Folia only).
-     * 
-     * @param gTask The task.
-     * @param location The location
-     */
+
     public void executeAsyncLocation(Runnable gTask, Location location) {
     	if (isFolia) {
     		Bukkit.getRegionScheduler().run(instance, location, task -> gTask.run());
@@ -1661,13 +1388,7 @@ public class SimpleClaimSystem extends JavaPlugin {
     		Bukkit.getScheduler().runTask(instance, gTask);
     	}
     }
-    
-    /**
-     * Executes a task asynchronously.
-     * 
-     * @param gTask The task to execute
-     * @param delay The delay.
-     */
+
     public void executeAsyncLater(Runnable gTask, long delayMillis) {
         if (isFolia) {
             Bukkit.getAsyncScheduler().runDelayed(this, task -> gTask.run(), delayMillis, TimeUnit.MILLISECONDS);
@@ -1676,13 +1397,7 @@ public class SimpleClaimSystem extends JavaPlugin {
             Bukkit.getScheduler().runTaskLaterAsynchronously(this, gTask, delayTicks);
         }
     }
-    
-    /**
-     * Executes a task synchronously later.
-     * 
-     * @param gTask The task to execute
-     * @param delayMillis The delay.
-     */
+
     public void executeSyncLater(Runnable gTask, long delayMillis) {
     	  long delayTicks = Math.max(1, (delayMillis * 20) / 1000);
         if (isFolia) {
@@ -1691,12 +1406,7 @@ public class SimpleClaimSystem extends JavaPlugin {
             Bukkit.getScheduler().runTaskLater(this, gTask, delayTicks);
         }
     }
-    
-    /**
-     * Executes a task synchronously.
-     * 
-     * @param gTask The task to execute
-     */
+
     public void executeSync(Runnable gTask) {
         if (isFolia) {
             Bukkit.getGlobalRegionScheduler().execute(this, () -> gTask.run());
@@ -1704,13 +1414,7 @@ public class SimpleClaimSystem extends JavaPlugin {
             Bukkit.getScheduler().runTask(this, gTask);
         }
     }
-    
-    /**
-     * Executes a task synchronously (for entities).
-     * 
-     * @param player The target player for who execute the task
-     * @param gTask The task to execute
-     */
+
     public void executeEntitySync(Player player, Runnable gTask) {
         if (isFolia) {
         	player.getScheduler().execute(this, gTask, null, 0);
@@ -1718,10 +1422,7 @@ public class SimpleClaimSystem extends JavaPlugin {
             Bukkit.getScheduler().runTask(this, gTask);
         }
     }
-    
-    /**
-     * Checks if the server is using Folia.
-     */
+
     public void checkFolia() {
         if (Bukkit.getVersion().toLowerCase().contains("folia")) {
             try {
@@ -1739,10 +1440,7 @@ public class SimpleClaimSystem extends JavaPlugin {
             isFolia = false;
         }
     }
-    
-    /**
-     * Checks if the server is using Paper/Purpur or a fork of Paper
-     */
+
     public void checkPaper() {
     	if(Bukkit.getVersion().toLowerCase().contains("paper")) {
             try {
@@ -1760,18 +1458,10 @@ public class SimpleClaimSystem extends JavaPlugin {
         	isPaper = false;
         }
     }
-    
-    /**
-     * Reloads the language file.
-     *
-     * @param plugin The plugin instance
-     * @param sender The command sender
-     * @param lang The language file to reload
-     */
+
     public void reloadLang(CommandSender sender, String l) {
 		String lang = l;
-        
-        // Check default language file for additions
+
         File custom = new File(getDataFolder() + File.separator + "langs", lang);
         final boolean check = !custom.exists() ? true : false;
         if (!custom.exists()) {
@@ -1810,13 +1500,7 @@ public class SimpleClaimSystem extends JavaPlugin {
             });
         }
     }
-    
-    /**
-     * Updates the language file with missing keys and removes obsolete keys.
-     * 
-     * @param plugin The plugin instance
-     * @param file The language file to update
-     */
+
     private void updateLangFileWithMissingKeys(String file) {
         try {
             InputStream defLangStream = getClass().getClassLoader().getResourceAsStream("langs/en_US.yml");
@@ -1827,7 +1511,6 @@ public class SimpleClaimSystem extends JavaPlugin {
             FileConfiguration customConfig = YamlConfiguration.loadConfiguration(langFile);
             boolean needSave = false;
 
-            // Add missing keys
             for (String key : defConfig.getKeys(true)) {
                 if (!customConfig.contains(key)) {
                     customConfig.set(key, defConfig.get(key));
@@ -1835,7 +1518,6 @@ public class SimpleClaimSystem extends JavaPlugin {
                 }
             }
 
-            // Remove obsolete keys
             Set<String> customConfigKeys = new HashSet<>(customConfig.getKeys(true));
             for (String key : customConfigKeys) {
                 if (!defConfig.contains(key) && !key.startsWith("custom-")) {
@@ -1849,12 +1531,7 @@ public class SimpleClaimSystem extends JavaPlugin {
             e.printStackTrace();
         }
     }
-    
-    /**
-     * Updates the configuration file with default values, adding missing keys and removing obsolete ones.
-     *
-     * @param plugin The plugin instance
-     */
+
     public void updateConfigWithDefaults() {
         File configFile = new File(getDataFolder(), "config.yml");
         if (!configFile.exists()) {
@@ -1868,7 +1545,6 @@ public class SimpleClaimSystem extends JavaPlugin {
 
         boolean changed = false;
 
-        // Add missing keys
         for (String key : defConfig.getKeys(true)) {
             if (!config.contains(key)) {
                 config.set(key, defConfig.get(key));
@@ -1876,7 +1552,6 @@ public class SimpleClaimSystem extends JavaPlugin {
             }
         }
 
-        // Remove obsolete keys
         Set<String> configKeys = new HashSet<>(config.getKeys(true));
         for (String key : configKeys) {
             if (!defConfig.contains(key) && !checkKey(key)) {
@@ -1898,13 +1573,7 @@ public class SimpleClaimSystem extends JavaPlugin {
             }
         }
     }
-    
-    /**
-     * Adds missing keys from the default group to all other groups.
-     *
-     * @param defaultGroup the ConfigurationSection of the default group
-     * @param groups       the ConfigurationSection containing all groups
-     */
+
     private boolean addMissingKeysFromDefault(ConfigurationSection defaultGroup, ConfigurationSection groups) {
     	boolean changed = false;
         for (String groupName : groups.getKeys(false)) {
@@ -1918,12 +1587,6 @@ public class SimpleClaimSystem extends JavaPlugin {
         return changed;
     }
 
-    /**
-     * Adds missing keys from the default group to the specified group.
-     *
-     * @param defaultGroup the ConfigurationSection of the default group
-     * @param group        the ConfigurationSection of the group to update
-     */
     private boolean addMissingKeys(ConfigurationSection defaultGroup, ConfigurationSection group) {
     	boolean changed = false;
         for (String key : defaultGroup.getKeys(false)) {
@@ -1935,23 +1598,12 @@ public class SimpleClaimSystem extends JavaPlugin {
         }
         return changed;
     }
-    
-    /**
-     * Check the key
-     * 
-     * @param key The target key
-     * @return True if the key must be deleted
-     */
+
     private boolean checkKey(String key) {
     	return key.startsWith("groups.") || key.startsWith("players.") || key.startsWith("expulsion-location") ||
     			key.startsWith("claims-worlds-mode") || key.equals("worlds-disabled") || key.startsWith("world-aliases");
     }
-    
-    /**
-     * Checks for updates for the plugin.
-     * 
-     * @return The update message.
-     */
+
     public String checkForUpdates() {
         try {
         	URI uri = URI.create("https://raw.githubusercontent.com/Xyness/SimpleClaimSystem/main/version.yml");
@@ -1974,12 +1626,7 @@ public class SimpleClaimSystem extends JavaPlugin {
             return "Error when checking new update";
         }
     }
-    
-    /**
-     * Checks for updates for the plugin, asynchronously.
-     * 
-     * @return The update message.
-     */
+
     public CompletableFuture<String> checkForUpdatesAsync() {
         return CompletableFuture.supplyAsync(() -> {
             try {
@@ -2006,13 +1653,7 @@ public class SimpleClaimSystem extends JavaPlugin {
             }
         });
     }
-    
-    /**
-     * Checks and saves a resource file if it does not exist.
-     * 
-     * @param plugin The plugin instance
-     * @param resource The resource file to check and save
-     */
+
     private void checkAndSaveResource(String resource) {
         File file = new File(getDataFolder() + File.separator + resource);
         if (!file.exists()) {
@@ -2020,130 +1661,59 @@ public class SimpleClaimSystem extends JavaPlugin {
             saveResource(resource, false);
         }
     }
-    
-    /**
-     * Returns the SimpleClaimSystem instance.
-     * 
-     * @return The SimpleClaimSystem instance
-     */
+
     public SimpleClaimSystem getInstance() {
         return instance;
     }
-    
-    /**
-     * Returns the ClaimMain instance.
-     * 
-     * @return The ClaimMain instance
-     */
+
     public ClaimMain getMain() {
         return claimInstance;
     }
-    
-    /**
-     * Returns the ClaimGuis instance.
-     * 
-     * @return The ClaimGuis instance
-     */
+
     public ClaimGuis getGuis() {
         return claimGuisInstance;
     }
-    
-    /**
-     * Returns the ClaimSettings instance.
-     * 
-     * @return The ClaimSettings instance
-     */
+
     public ClaimSettings getSettings() {
         return claimSettingsInstance;
     }
-    
-    /**
-     * Returns the ClaimLanguage instance.
-     * 
-     * @return The ClaimLanguage instance
-     */
+
     public ClaimLanguage getLanguage() {
         return claimLanguageInstance;
     }
-    
-    /**
-     * Returns the ClaimWorldGuard instance.
-     * 
-     * @return The ClaimWorldGuard instance
-     */
+
     public ClaimWorldGuard getWorldGuard() {
         return claimWorldguardInstance;
     }
-    
-    /**
-     * Returns the ClaimVault instance.
-     * 
-     * @return The ClaimVault instance
-     */
+
     public ClaimVault getVault() {
         return claimVaultInstance;
     }
-    
-    /**
-     * Returns the CPlayerMain instance.
-     * 
-     * @return The CPlayerMain instance
-     */
+
     public CPlayerMain getPlayerMain() {
         return cPlayerMainInstance;
     }
-    
-    /**
-     * Returns the ClaimBossBar instance.
-     * 
-     * @return The ClaimBossBar instance
-     */
+
     public ClaimBossBar getBossBars() {
         return claimBossBarInstance;
     }
-    
-    /**
-     * Returns the ClaimDynmap instance.
-     * 
-     * @return The ClaimDynmap instance
-     */
+
     public ClaimDynmap getDynmap() {
         return dynmapInstance;
     }
-    
-    /**
-     * Returns the ClaimBluemap instance.
-     * 
-     * @return The ClaimBluemap instance
-     */
+
     public ClaimBluemap getBluemap() {
         return bluemapInstance;
     }
-    
-    /**
-     * Returns the ClaimPl3xMap instance.
-     * 
-     * @return The ClaimPl3xMap instance
-     */
+
     public ClaimPl3xMap getPl3xMap() {
         return pl3xmapInstance;
     }
-    
-    /**
-     * Returns the ClaimPurge instance.
-     * 
-     * @return The ClaimPurge instance
-     */
+
     public ClaimPurge getAutopurge() {
         return claimPurgeInstance;
     }
-    
-    /**
-     * Gets the offline player asynchronously.
-     * 
-     * @param playerName The player's name.
-     * @param callback The callback.
-     */
+
     public void getOfflinePlayer(String playerName, Consumer<OfflinePlayer> callback) {
     	CompletableFuture.runAsync(() -> {
     		
@@ -2154,12 +1724,7 @@ public class SimpleClaimSystem extends JavaPlugin {
     		
     	});
     }
-    
-    /**
-     * Define the expulsion location.
-     * 
-     * @param loc The new expulsion location
-     */
+
     public void setExpulsionLocation(Location loc) {
     	getSettings().setExpulsionLocation(loc);
     	CompletableFuture.runAsync(() -> {
@@ -2174,12 +1739,7 @@ public class SimpleClaimSystem extends JavaPlugin {
             reloadConfig();
     	});
     }
-    
-    /**
-     * Gets the main Minecraft version (e.g., "1.21" for "1.21.4").
-     *
-     * @return The main version as a string (e.g., "1.21").
-     */
+
     public void checkMinecraftVersion() {
     	String version = Bukkit.getBukkitVersion();
         String[] parts = version.split("\\.");

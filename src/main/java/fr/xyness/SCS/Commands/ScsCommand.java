@@ -309,6 +309,17 @@ public class ScsCommand implements CommandExecutor, TabCompleter {
     	}
     	if(args[0].equalsIgnoreCase("set-lang")) {
     		instance.reloadLang(sender, args[1]);
+
+			File configFile = new File(instance.getDataFolder(), "config.yml");
+			FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+			config.set("language", args[1]);
+			try {
+				config.save(configFile);
+			} catch (IOException e) {
+				e.printStackTrace();
+				sender.sendMessage("§c[SCS]An unknown error occurred, please check the cmd");
+			}
+
     		return;
     	}
     	instance.getMain().getHelp(sender, args[0], "scs");
