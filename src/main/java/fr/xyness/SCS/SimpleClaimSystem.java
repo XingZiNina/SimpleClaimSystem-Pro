@@ -81,6 +81,7 @@ public class SimpleClaimSystem extends JavaPlugin {
     private ClaimPurge claimPurgeInstance;
     private CPlayerMain cPlayerMainInstance;
     private ClaimBossBar claimBossBarInstance;
+    private ClaimSquaremap squaremapInstance;
     private SimpleClaimSystem instance;
     private String Version = "1.4";
     private HikariDataSource dataSource;
@@ -239,6 +240,13 @@ public class SimpleClaimSystem extends JavaPlugin {
                 claimSettingsInstance.addSetting("bluemap", "true");
             } else {
                 claimSettingsInstance.addSetting("bluemap", "false");
+            }
+
+            Plugin squaremap = Bukkit.getPluginManager().getPlugin("squaremap");
+            if (squaremap != null) {
+                claimSettingsInstance.addSetting("squaremap", "true");
+            } else {
+                claimSettingsInstance.addSetting("squaremap", "false");
             }
 
             Plugin pl3xmap = Bukkit.getPluginManager().getPlugin("pl3xmap");
@@ -540,6 +548,16 @@ public class SimpleClaimSystem extends JavaPlugin {
             claimSettingsInstance.addSetting("pl3xmap-claim-fill-color", getConfig().getString("pl3xmap-settings.claim-fill-color"));
             claimSettingsInstance.addSetting("pl3xmap-claim-hover-text", getConfig().getString("pl3xmap-settings.claim-hover-text"));
 
+            configC = getConfig().getString("squaremap");
+            if(configC.equalsIgnoreCase("true") && claimSettingsInstance.getBooleanSetting("squaremap")) {
+                if (!reload) squaremapInstance = new ClaimSquaremap(this);
+            } else {
+                claimSettingsInstance.addSetting("squaremap", "false");
+            }
+            claimSettingsInstance.addSetting("squaremap-claim-border-color", getConfig().getString("squaremap-settings.claim-border-color"));
+            claimSettingsInstance.addSetting("squaremap-claim-fill-color", getConfig().getString("squaremap-settings.claim-fill-color"));
+            claimSettingsInstance.addSetting("squaremap-claim-hover-text", getConfig().getString("squaremap-settings.claim-hover-text"));
+
             configC = getConfig().getString("protection-message");
             if (configC.equalsIgnoreCase("action_bar") || 
                     configC.equalsIgnoreCase("title") ||
@@ -764,6 +782,10 @@ public class SimpleClaimSystem extends JavaPlugin {
             claimBossBarInstance.loadBossbarSettings();
             claimInstance.loadClaims();
             cPlayerMainInstance.loadPlayers();
+
+            if (claimSettingsInstance.getBooleanSetting("squaremap") && squaremapInstance != null) {
+                squaremapInstance.initializeLayers();
+            }
 
             ConfigurationSection playersSection = getConfig().getConfigurationSection("players");
             Map<UUID, Map<String, Double>> playersSettings = new HashMap<>();
@@ -1708,6 +1730,10 @@ public class SimpleClaimSystem extends JavaPlugin {
 
     public ClaimPl3xMap getPl3xMap() {
         return pl3xmapInstance;
+    }
+
+    public ClaimSquaremap getSquaremap() {
+        return squaremapInstance;
     }
 
     public ClaimPurge getAutopurge() {

@@ -40,13 +40,13 @@ dependencies {
     compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
     compileOnly("org.geysermc.floodgate:api:2.2.3-SNAPSHOT")
     compileOnly("dev.folia:folia-api:1.20.4-R0.1-SNAPSHOT")
-
     implementation("com.zaxxer:HikariCP:7.0.2")
     implementation("com.mojang:authlib:1.5.21")
     implementation("com.flowpowered:flow-math:1.0.3")
     compileOnly("net.momirealms:craft-engine-core:0.0.67")
     compileOnly("net.momirealms:craft-engine-bukkit:0.0.67")
     compileOnly("net.momirealms:craft-engine-adventure:0.0.67")
+    compileOnly("xyz.jpenilla", "squaremap-api", "1.3.11")
     compileOnly(files("libs/PlaceholderAPI-2.11.7.jar"))
     compileOnly("com.github.LoneDev6:api-itemsadder:3.6.1")
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.4") {
