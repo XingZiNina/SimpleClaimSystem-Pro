@@ -40,6 +40,7 @@ dependencies {
     compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
     compileOnly("org.geysermc.floodgate:api:2.2.3-SNAPSHOT")
     compileOnly("dev.folia:folia-api:1.20.4-R0.1-SNAPSHOT")
+    implementation("com.technicjelle:BMUtils:4.3.1")
     implementation("com.zaxxer:HikariCP:7.0.2")
     implementation("com.mojang:authlib:1.5.21")
     implementation("com.flowpowered:flow-math:1.0.3")

@@ -2474,6 +2474,7 @@ public class ClaimMain {
 	            if (instance.getSettings().getBooleanSetting("dynmap")) instance.getDynmap().createClaimZone(newClaim);
 	            if (instance.getSettings().getBooleanSetting("bluemap")) instance.getBluemap().createClaimZone(newClaim);
 	            if (instance.getSettings().getBooleanSetting("pl3xmap")) instance.getPl3xMap().createClaimZone(newClaim);
+                if (instance.getSettings().getBooleanSetting("squaremap")) instance.getPl3xMap().createClaimZone(newClaim);
 	            if (instance.getSettings().getBooleanSetting("keep-chunks-loaded")) {
 	            	if(instance.isFolia()) {
 	            		chunks.stream().forEach(c -> Bukkit.getRegionScheduler().execute(instance, c.getWorld(), c.getX(), c.getZ(), () -> c.setForceLoaded(true)));
@@ -3932,7 +3933,7 @@ public class ClaimMain {
                     	
                     	// Remove bossbar and maps
                         if (instance.getSettings().getBooleanSetting("dynmap")) instance.getDynmap().deleteMarker(Set.of(chunk));
-                        if (instance.getSettings().getBooleanSetting("bluemap")) instance.getBluemap().deleteMarker(Set.of(chunk));
+                        if (instance.getSettings().getBooleanSetting("bluemap")) instance.getBluemap().createClaimZone(claim);
                         if (instance.getSettings().getBooleanSetting("pl3xmap")) instance.getPl3xMap().deleteMarker(Set.of(chunk));
                         if (instance.getSettings().getBooleanSetting("squaremap")) instance.getSquaremap().createClaimZone(claim);
                     	instance.executeSync(() -> instance.getBossBars().deactivateBossBar(Set.of(chunk)));
@@ -3972,7 +3973,7 @@ public class ClaimMain {
                 	
                 	// Remove bossbar and maps
                     if (instance.getSettings().getBooleanSetting("dynmap")) instance.getDynmap().deleteMarker(Set.of(chunk));
-                    if (instance.getSettings().getBooleanSetting("bluemap")) instance.getBluemap().deleteMarker(Set.of(chunk));
+                    if (instance.getSettings().getBooleanSetting("bluemap")) instance.getBluemap().createClaimZone(claim);
                     if (instance.getSettings().getBooleanSetting("pl3xmap")) instance.getPl3xMap().deleteMarker(Set.of(chunk));
                     if (instance.getSettings().getBooleanSetting("squaremap")) instance.getSquaremap().createClaimZone(claim);
                 	instance.executeSync(() -> instance.getBossBars().deactivateBossBar(Set.of(chunk)));
@@ -4025,7 +4026,7 @@ public class ClaimMain {
             	
             	// Remove bossbar and maps
                 if (instance.getSettings().getBooleanSetting("dynmap")) instance.getDynmap().deleteMarker(Set.of(chunk));
-                if (instance.getSettings().getBooleanSetting("bluemap")) instance.getBluemap().deleteMarker(Set.of(chunk));
+                if (instance.getSettings().getBooleanSetting("bluemap")) instance.getBluemap().createClaimZone(claim);
                 if (instance.getSettings().getBooleanSetting("pl3xmap")) instance.getPl3xMap().deleteMarker(Set.of(chunk));
                 if (instance.getSettings().getBooleanSetting("squaremap")) instance.getSquaremap().createClaimZone(claim);
             	instance.executeSync(() -> instance.getBossBars().deactivateBossBar(Set.of(chunk)));
