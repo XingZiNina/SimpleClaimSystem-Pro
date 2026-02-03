@@ -162,6 +162,7 @@ public class ClaimEvents implements Listener {
 	 */
     @EventHandler
     public void onPlayerToggleGlide(EntityToggleGlideEvent event) {
+		if(event.getEntity().getLocation().getBlockY() <= 63) return;
     	WorldMode mode = instance.getSettings().getWorldMode(event.getEntity().getWorld().getName());
         if (event.getEntity() instanceof Player) {
             if (event.isGliding()) {
@@ -189,6 +190,7 @@ public class ClaimEvents implements Listener {
      */
     @EventHandler
     public void onFireworkLaunch(ProjectileLaunchEvent event) {
+		if(event.getEntity().getLocation().getBlockY() <= 63) return;
     	WorldMode mode = instance.getSettings().getWorldMode(event.getEntity().getWorld().getName());
         if (event.getEntity() instanceof Firework) {
             Firework firework = (Firework) event.getEntity();
@@ -219,6 +221,7 @@ public class ClaimEvents implements Listener {
 	 */
 	@EventHandler
 	public void onPotionSplash(PotionSplashEvent event) {
+		if(event.getEntity().getLocation().getBlockY() <= 63) return;
 		
 		WorldMode mode = instance.getSettings().getWorldMode(event.getEntity().getWorld().getName());
 
@@ -262,6 +265,7 @@ public class ClaimEvents implements Listener {
 	 */
 	@EventHandler
 	public void onPlayerDamage(EntityDamageEvent event) {
+		if(event.getEntity().getLocation().getBlockY() <= 63) return;
 		if(!(event.getEntity() instanceof Player)) return;
 		if(!instance.getSettings().getBooleanSetting("claim-fly-disabled-on-damage")) return;
 		Player player = (Player) event.getEntity();
@@ -279,6 +283,7 @@ public class ClaimEvents implements Listener {
 	@EventHandler
 	public void onPlayerHit(EntityDamageByEntityEvent event) {
 	    if(event.isCancelled()) return;
+		if(event.getEntity().getLocation().getBlockY() <= 63) return;
 	    if (!(event.getEntity() instanceof Player)) return;
 
 	    Player player = (Player) event.getEntity();
@@ -330,6 +335,7 @@ public class ClaimEvents implements Listener {
      */
 	@EventHandler(priority = EventPriority.LOWEST)
     public void onCreatureSpawn(CreatureSpawnEvent event) {
+		if(event.getLocation().getBlockY() <= 63) return;
 		WorldMode mode = instance.getSettings().getWorldMode(event.getLocation().getWorld().getName());
 		Chunk chunk = event.getLocation().getChunk();
 		if(instance.getMain().checkIfClaimExists(chunk)) {
@@ -355,6 +361,7 @@ public class ClaimEvents implements Listener {
      */
     @EventHandler
     public void onPlayerDropItem(PlayerDropItemEvent event) {
+		if(event.getItemDrop().getLocation().getBlockY() <= 63) return;
     	Chunk chunk = event.getItemDrop().getLocation().getChunk();
     	Player player = event.getPlayer();
     	WorldMode mode = instance.getSettings().getWorldMode(player.getWorld().getName());
@@ -379,6 +386,7 @@ public class ClaimEvents implements Listener {
      */
     @EventHandler
     public void onPlayerUsePortal(PlayerPortalEvent event) {
+		if(event.getPlayer().getLocation().getBlockY() <= 63) return;
     	Chunk chunk = event.getFrom().getChunk();
     	Player player = event.getPlayer();
     	WorldMode mode = instance.getSettings().getWorldMode(player.getWorld().getName());
@@ -403,6 +411,7 @@ public class ClaimEvents implements Listener {
      */
     @EventHandler
     public void onEntityExplode(EntityExplodeEvent event) {
+		if(event.getLocation().getBlockY() <= 63) return;
     	WorldMode mode = instance.getSettings().getWorldMode(event.getLocation().getWorld().getName());
         Iterator<Block> blockIterator = event.blockList().iterator();
         while (blockIterator.hasNext()) {
@@ -444,6 +453,7 @@ public class ClaimEvents implements Listener {
      */
     @EventHandler
     public void onProjectileHit(ProjectileHitEvent event) {
+		if(event.getEntity().getLocation().getBlockY() <= 63) return;
     	WorldMode mode = instance.getSettings().getWorldMode(event.getEntity().getWorld().getName());
 		if (event.getEntityType() == EntityType.WITHER_SKULL) {
             if (event.getHitBlock() != null) {
@@ -563,6 +573,7 @@ public class ClaimEvents implements Listener {
      */
     @EventHandler
     public void onBlockExplode(BlockExplodeEvent event) {
+		if(event.getBlock().getLocation().getBlockY() <= 63) return;
     	WorldMode mode = instance.getSettings().getWorldMode(event.getBlock().getWorld().getName());
         Iterator<Block> blockIterator = event.blockList().iterator();
         while (blockIterator.hasNext()) {
@@ -582,6 +593,7 @@ public class ClaimEvents implements Listener {
      */
     @EventHandler
     public void onEntityChangeBlock(EntityChangeBlockEvent event) {
+		if(event.getBlock().getLocation().getBlockY() <= 63) return;
     	WorldMode mode = instance.getSettings().getWorldMode(event.getBlock().getLocation().getWorld().getName());
         if (event.getEntityType() == EntityType.WITHER || event.getEntityType() == EntityType.WITHER_SKULL) {
             Block block = event.getBlock();
@@ -601,9 +613,11 @@ public class ClaimEvents implements Listener {
      */
     @EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerBreak(BlockBreakEvent event){
+		if(event.getBlock().getLocation().getBlockY() <= 63) return;
 		Player player = event.getPlayer();
 		WorldMode mode = instance.getSettings().getWorldMode(player.getLocation().getWorld().getName());
 		if(instance.getPlayerMain().checkPermPlayer(player, "scs.bypass")) return;
+		if(event.getBlock().getLocation().getBlockY() <= 63) return;
 		Chunk chunk = event.getBlock().getLocation().getChunk();
 		if(instance.getMain().checkIfClaimExists(chunk)) {
 			Claim claim = instance.getMain().getClaim(chunk);
@@ -637,6 +651,7 @@ public class ClaimEvents implements Listener {
      */
     @EventHandler(priority = EventPriority.LOWEST)
 	public void onVehicleDamage(VehicleDamageEvent event){
+		if(event.getVehicle().getLocation().getBlockY() <= 63) return;
 		Entity damager = event.getAttacker();
 		if(damager == null) return;
 		WorldMode mode = instance.getSettings().getWorldMode(damager.getLocation().getWorld().getName());
@@ -675,6 +690,7 @@ public class ClaimEvents implements Listener {
      */
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerPlace(BlockPlaceEvent event){
+		if(event.getBlock().getLocation().getBlockY() <= 63) return;
 		Player player = event.getPlayer();
 		if(instance.getPlayerMain().checkPermPlayer(player, "scs.bypass")) return;
 		WorldMode mode = instance.getSettings().getWorldMode(player.getLocation().getWorld().getName());
@@ -725,6 +741,7 @@ public class ClaimEvents implements Listener {
      */
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onHangingPlace(HangingPlaceEvent event) {
+		if(event.getBlock().getLocation().getBlockY() <= 63) return;
 		if(event.isCancelled()) return;
 		Player player = event.getPlayer();
 		if(instance.getPlayerMain().checkPermPlayer(player, "scs.bypass")) return;
@@ -749,6 +766,7 @@ public class ClaimEvents implements Listener {
      */
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onHangingBreak(HangingBreakEvent event) {
+		if(event.getEntity().getLocation().getBlockY() <= 63) return;
 		Chunk chunk = event.getEntity().getLocation().getChunk();
 		WorldMode mode = instance.getSettings().getWorldMode(event.getEntity().getLocation().getWorld().getName());
 		if(instance.getMain().checkIfClaimExists(chunk)) {
@@ -773,6 +791,7 @@ public class ClaimEvents implements Listener {
      */
 	@EventHandler(priority = EventPriority.LOWEST)
     public void onHangingBreakByEntity(HangingBreakByEntityEvent event) {
+		if(event.getEntity().getLocation().getBlockY() <= 63) return;
         if (event.getEntity().getType() == EntityType.PAINTING
         		|| event.getEntity().getType() == EntityType.ITEM_FRAME 
         		|| event.getEntity().getType() == EntityType.GLOW_ITEM_FRAME) {
@@ -811,6 +830,7 @@ public class ClaimEvents implements Listener {
      */
 	@EventHandler(priority = EventPriority.LOWEST)
     public void onBucketUse(PlayerBucketEmptyEvent event) {
+		if(event.getBlock().getLocation().getBlockY() <= 63) return;
 		if(event.isCancelled()) return;
 		Player player = event.getPlayer();
 		if(instance.getPlayerMain().checkPermPlayer(player, "scs.bypass")) return;
@@ -835,6 +855,7 @@ public class ClaimEvents implements Listener {
      */
 	@EventHandler(priority = EventPriority.LOWEST)
     public void onBucketUse(PlayerBucketFillEvent event) {
+		if(event.getBlock().getLocation().getBlockY() <= 63) return;
 		if(event.isCancelled()) return;
 		Player player = event.getPlayer();
 		if(instance.getPlayerMain().checkPermPlayer(player, "scs.bypass")) return;
@@ -861,6 +882,7 @@ public class ClaimEvents implements Listener {
 	 */
 	@EventHandler
 	public void onPlayerFish(PlayerFishEvent event) {
+		if(event.getPlayer().getLocation().getBlockY() <= 63) return;
 		Player player = event.getPlayer();
 		if(instance.getPlayerMain().checkPermPlayer(player, "scs.bypass")) return;
 		WorldMode mode = instance.getSettings().getWorldMode(player.getLocation().getWorld().getName());
@@ -890,6 +912,7 @@ public class ClaimEvents implements Listener {
      */
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onEntityPlace(EntityPlaceEvent event) {
+		if(event.getBlock().getLocation().getBlockY() <= 63) return;
 		if(event.isCancelled()) return;
 		Player player = event.getPlayer();
 		if(instance.getPlayerMain().checkPermPlayer(player, "scs.bypass")) return;
@@ -914,6 +937,7 @@ public class ClaimEvents implements Listener {
      */
 	@EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerInteract(PlayerInteractEvent event) {
+		if(event.getPlayer().getLocation().getBlockY() <= 63) return;
 		Player player = event.getPlayer();
 		if(instance.getPlayerMain().checkPermPlayer(player, "scs.bypass")) return;
 		WorldMode mode = instance.getSettings().getWorldMode(player.getLocation().getWorld().getName());
@@ -1098,6 +1122,7 @@ public class ClaimEvents implements Listener {
      */
 	@EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerInteractEntity(PlayerInteractAtEntityEvent event) {
+		if(event.getPlayer().getLocation().getBlockY() <= 63) return;
     	Player player = event.getPlayer();
     	if(instance.getPlayerMain().checkPermPlayer(player, "scs.bypass")) return;
 		WorldMode mode = instance.getSettings().getWorldMode(event.getRightClicked().getLocation().getWorld().getName());
@@ -1151,6 +1176,7 @@ public class ClaimEvents implements Listener {
      */
 	@EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerInteractEntity2(PlayerInteractEntityEvent event) {
+		if(event.getPlayer().getLocation().getBlockY() <= 63) return;
     	Player player = event.getPlayer();
     	if(instance.getPlayerMain().checkPermPlayer(player, "scs.bypass")) return;
 		WorldMode mode = instance.getSettings().getWorldMode(event.getRightClicked().getLocation().getWorld().getName());
@@ -1204,6 +1230,7 @@ public class ClaimEvents implements Listener {
      */
 	@EventHandler
     public void onLiquidFlow(BlockFromToEvent event) {
+		if(event.getBlock().getLocation().getBlockY() <= 63) return;
     	Block block = event.getBlock();
     	Block toBlock = event.getToBlock();
     	Chunk chunk = toBlock.getLocation().getChunk();
@@ -1268,6 +1295,7 @@ public class ClaimEvents implements Listener {
      */
 	@EventHandler
     public void onDispense(BlockDispenseEvent event) {
+		if(event.getBlock().getLocation().getBlockY() <= 63) return;
     	Block block = event.getBlock();
     	if(hasCrossChunkRedstoneSourceAndNeedBlock(block)) {
     		event.setCancelled(true);
@@ -1288,6 +1316,7 @@ public class ClaimEvents implements Listener {
 	
 	@EventHandler
 	public void onRedstoneChange(BlockRedstoneEvent event) {
+		if(event.getBlock().getLocation().getBlockY() <= 63) return;
 	    Block targetBlock = event.getBlock();
 	    Chunk targetChunk = targetBlock.getChunk();
 	    if (event.getNewCurrent() <= 0) return;
@@ -1316,6 +1345,7 @@ public class ClaimEvents implements Listener {
      */
 	@EventHandler
     public void onPistonExtend(BlockPistonExtendEvent event) {
+		if(event.getBlock().getLocation().getBlockY() <= 63) return;
         Block piston = event.getBlock();
     	if(hasCrossChunkRedstoneSourceAndNeedBlock(piston)) {
     		event.setCancelled(true);
@@ -1337,6 +1367,7 @@ public class ClaimEvents implements Listener {
      */
 	@EventHandler
     public void onPistonRetract(BlockPistonRetractEvent event) {
+		if(event.getBlock().getLocation().getBlockY() <= 63) return;
         Block piston = event.getBlock();
     	if(hasCrossChunkRedstoneSourceAndNeedBlock(piston)) {
     		event.setCancelled(true);
@@ -1358,6 +1389,7 @@ public class ClaimEvents implements Listener {
      */
     @EventHandler
     public void onFrostWalkerUse(EntityBlockFormEvent event) {
+		if(event.getBlock().getLocation().getBlockY() <= 63) return;
     	Chunk chunk = event.getBlock().getLocation().getChunk();
     	WorldMode mode = instance.getSettings().getWorldMode(event.getBlock().getLocation().getWorld().getName());
     	if(instance.getMain().checkIfClaimExists(chunk)) {
@@ -1398,6 +1430,7 @@ public class ClaimEvents implements Listener {
      */
     @EventHandler
     public void onBlockSpread(BlockSpreadEvent event) {
+		if(event.getBlock().getLocation().getBlockY() <= 63) return;
         if (event.getNewState().getType() == Material.FIRE) {
             Chunk chunk = event.getBlock().getLocation().getChunk();
             WorldMode mode = instance.getSettings().getWorldMode(event.getBlock().getLocation().getWorld().getName());
@@ -1416,6 +1449,7 @@ public class ClaimEvents implements Listener {
      */
     @EventHandler
     public void onBlockIgnite(BlockIgniteEvent event) {
+		if(event.getBlock().getLocation().getBlockY() <= 63) return;
         Chunk chunk = event.getBlock().getLocation().getChunk();
         WorldMode mode = instance.getSettings().getWorldMode(event.getBlock().getLocation().getWorld().getName());
         if(instance.getMain().checkIfClaimExists(chunk)) {
@@ -1455,6 +1489,7 @@ public class ClaimEvents implements Listener {
      */
     @EventHandler
     public void onBlockBurn(BlockBurnEvent event) {
+		if(event.getBlock().getLocation().getBlockY() <= 63) return;
         Chunk chunk = event.getBlock().getLocation().getChunk();
         WorldMode mode = instance.getSettings().getWorldMode(event.getBlock().getLocation().getWorld().getName());
         if(instance.getMain().checkIfClaimExists(chunk)) {
@@ -1472,6 +1507,7 @@ public class ClaimEvents implements Listener {
      */
     @EventHandler
     public void onEntityDamageByEntity2(EntityDamageByEntityEvent event) {
+		if(event.getEntity().getLocation().getBlockY() <= 63) return;
     	Entity entity = event.getEntity();
     	if(entity instanceof ArmorStand || entity instanceof ItemFrame || entity instanceof GlowItemFrame) {
             Entity damager = event.getDamager();
@@ -1514,6 +1550,7 @@ public class ClaimEvents implements Listener {
      */
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+		if(event.getEntity().getLocation().getBlockY() <= 63) return;
         Entity entity = event.getEntity();
         Chunk chunk = entity.getLocation().getChunk();
         WorldMode mode = instance.getSettings().getWorldMode(entity.getLocation().getWorld().getName());
@@ -1557,6 +1594,7 @@ public class ClaimEvents implements Listener {
      */
     @EventHandler(priority = EventPriority.LOWEST)
     public void onVehicleEnter(VehicleEnterEvent event) {
+		if(event.getEntered().getLocation().getBlockY() <= 63) return;
         Entity entity = event.getEntered();
         if (entity instanceof Player) {
             Player player = (Player) entity;
@@ -1584,6 +1622,7 @@ public class ClaimEvents implements Listener {
      */
     @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockChange(EntityChangeBlockEvent event) {
+		if(event.getBlock().getLocation().getBlockY() <= 63) return;
         Entity entity = event.getEntity();
         Block block = event.getBlock();
 
@@ -1618,6 +1657,7 @@ public class ClaimEvents implements Listener {
      * @return True if need block, false otherwise.
      */
     private boolean hasCrossChunkRedstoneSourceAndNeedBlock(Block block) {
+		if(block.getLocation().getBlockY() <= 63) return false;
         Chunk currentChunk = block.getChunk();
 
         for (BlockFace face : BlockFace.values()) {
@@ -1641,39 +1681,45 @@ public class ClaimEvents implements Listener {
      * @param retractOrNot flag indicating whether the piston is retracting.
      * @return true if the piston can move the blocks, false otherwise.
      */
-    private boolean canPistonMoveBlock(List<Block> blocks, BlockFace direction, Chunk pistonChunk, boolean retractOrNot) {
-    	WorldMode mode = instance.getSettings().getWorldMode(pistonChunk.getWorld().getName());
-    	if(retractOrNot) {
-	        for (Block block : blocks) {
-	        	Chunk chunk = block.getLocation().getChunk();
-	            if (!chunk.equals(pistonChunk)) {
-	                if (instance.getMain().checkIfClaimExists(chunk)) {
-	                	if(instance.getMain().getOwnerInClaim(pistonChunk).equals(instance.getMain().getOwnerInClaim(chunk))) return true;
-	                	if(!instance.getMain().canPermCheck(chunk, "Redstone", "Natural")) {
-	                		return false;
-	                	}
-	                } else if (mode == WorldMode.SURVIVAL_REQUIRING_CLAIMS && !instance.getSettings().getSettingSRC("Redstone")) {
-	                	return false;
-	                }
-	            }
-	        }
-	        return true;
-    	}
-        for (Block block : blocks) {
-            Chunk chunk = block.getRelative(direction).getLocation().getChunk();
-            if (!chunk.equals(pistonChunk)) {
-                if (instance.getMain().checkIfClaimExists(chunk)) {
-                	if(instance.getMain().getOwnerInClaim(pistonChunk).equals(instance.getMain().getOwnerInClaim(chunk))) return true;
-                	if(!instance.getMain().canPermCheck(chunk, "Redstone", "Natural")) {
-                		return false;
-                	}
-                } else if (mode == WorldMode.SURVIVAL_REQUIRING_CLAIMS && !instance.getSettings().getSettingSRC("Redstone")) {
-                	return false;
-                }
-            }
-        }
-        return true;
-    }
+	private boolean canPistonMoveBlock(List<Block> blocks, BlockFace direction, Chunk pistonChunk, boolean retractOrNot) {
+		// Check if any block is below or at Y=63, if so, allow movement (return true)
+		for (Block block : blocks) {
+			if (block.getLocation().getBlockY() <= 63) {
+				return true;
+			}
+		}
+		WorldMode mode = instance.getSettings().getWorldMode(pistonChunk.getWorld().getName());
+		if (retractOrNot) {
+			for (Block block : blocks) {
+				Chunk chunk = block.getLocation().getChunk();
+				if (!chunk.equals(pistonChunk)) {
+					if (instance.getMain().checkIfClaimExists(chunk)) {
+						if (instance.getMain().getOwnerInClaim(pistonChunk).equals(instance.getMain().getOwnerInClaim(chunk))) return true;
+						if (!instance.getMain().canPermCheck(chunk, "Redstone", "Natural")) {
+							return false;
+						}
+					} else if (mode == WorldMode.SURVIVAL_REQUIRING_CLAIMS && !instance.getSettings().getSettingSRC("Redstone")) {
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+		for (Block block : blocks) {
+			Chunk chunk = block.getRelative(direction).getLocation().getChunk();
+			if (!chunk.equals(pistonChunk)) {
+				if (instance.getMain().checkIfClaimExists(chunk)) {
+					if (instance.getMain().getOwnerInClaim(pistonChunk).equals(instance.getMain().getOwnerInClaim(chunk))) return true;
+					if (!instance.getMain().canPermCheck(chunk, "Redstone", "Natural")) {
+						return false;
+					}
+				} else if (mode == WorldMode.SURVIVAL_REQUIRING_CLAIMS && !instance.getSettings().getSettingSRC("Redstone")) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
     
     /**
      * Processes damage by a player to prevent unauthorized damage in claims.
@@ -1682,6 +1728,7 @@ public class ClaimEvents implements Listener {
      * @param event the entity damage by entity event.
      */
     private void processDamageByPlayer(Player player, Chunk chunk, EntityDamageByEntityEvent event) {
+		if(player.getLocation().getBlockY() <= 63) return;
         if(instance.getPlayerMain().checkPermPlayer(player, "scs.bypass")) return;
         Claim claim = instance.getMain().getClaim(chunk);
         if(!claim.getPermissionForPlayer("Damages", player)) {
@@ -1697,6 +1744,7 @@ public class ClaimEvents implements Listener {
      * @param chunk  The chunk.
      */
     private void handleWeatherSettings(Player player, Chunk to, Chunk from) {
+		if(player.getLocation().getBlockY() <= 63) return;
     	Claim claimTo = instance.getMain().getClaim(to);
     	Claim claimFrom = instance.getMain().getClaim(from);
         if (instance.getMain().checkIfClaimExists(to) && !claimTo.getPermissionForPlayer("Weather",player)) {
@@ -1715,6 +1763,7 @@ public class ClaimEvents implements Listener {
      * @param owner   The owner of the chunk.
      */
     private void handleAutoFly(Player player, CPlayer cPlayer, Chunk chunk, String owner) {
+		if(player.getLocation().getBlockY() <= 63) return;
     	Claim claim = instance.getMain().getClaim(chunk);
         if (cPlayer.getClaimAutofly() && (owner.equals(player.getName()) || claim != null && claim.getPermissionForPlayer("Fly", player)) && !instance.isFolia()) {
             instance.getPlayerMain().activePlayerFly(player);
@@ -1738,6 +1787,7 @@ public class ClaimEvents implements Listener {
      * @param world The world name.
      */
     private void handleAutoDelChunk(Player player, CPlayer cPlayer, Chunk chunk, String world) {
+		if(player.getLocation().getBlockY() <= 63) return;
         if (instance.getSettings().getWorldMode(world) == WorldMode.DISABLED) {
             player.sendMessage(instance.getLanguage().getMessage("autodelchunk-world-disabled").replace("%world%", world));
             cPlayer.setClaimAuto("");
@@ -1783,6 +1833,7 @@ public class ClaimEvents implements Listener {
      * @param world The world name.
      */
     private void handleAutoAddChunk(Player player, CPlayer cPlayer, Chunk chunk, String world) {
+		if(player.getLocation().getBlockY() <= 63) return;
         if (instance.getSettings().getWorldMode(world) == WorldMode.DISABLED) {
             player.sendMessage(instance.getLanguage().getMessage("autoaddchunk-world-disabled").replace("%world%", world));
             cPlayer.setClaimAuto("");
@@ -1880,6 +1931,7 @@ public class ClaimEvents implements Listener {
      * @param world The world name.
      */
     private void handleAutoUnclaim(Player player, CPlayer cPlayer, Chunk chunk, String world) {
+		if(player.getLocation().getBlockY() <= 63) return;
         if (instance.getSettings().getWorldMode(world) == WorldMode.DISABLED) {
             player.sendMessage(instance.getLanguage().getMessage("autounclaim-world-disabled").replace("%world%", world));
             cPlayer.setClaimAuto("");
@@ -1938,6 +1990,7 @@ public class ClaimEvents implements Listener {
      * @param world The world name.
      */
     private void handleAutoClaim(Player player, CPlayer cPlayer, Chunk chunk, String world) {
+		if(player.getLocation().getBlockY() <= 63) return;
         if (instance.getSettings().getWorldMode(world) == WorldMode.DISABLED) {
             player.sendMessage(instance.getLanguage().getMessage("autoclaim-world-disabled").replace("%world%", world));
             cPlayer.setClaimAuto("");
@@ -2002,6 +2055,7 @@ public class ClaimEvents implements Listener {
      * @param world The world name.
      */
     private void handleAutoMap(Player player, CPlayer cPlayer, Chunk chunk, String world) {
+		if(player.getLocation().getBlockY() <= 63) return;
         if (instance.getSettings().getWorldMode(world) == WorldMode.DISABLED) {
             player.sendMessage(instance.getLanguage().getMessage("automap-world-disabled").replace("%world%", world));
             cPlayer.setClaimAutomap(false);
@@ -2020,7 +2074,8 @@ public class ClaimEvents implements Listener {
      * @param ownerFROM The owner of the chunk the player is moving from.
      */
     private void handleEnterLeaveMessages(Player player, Chunk to, Chunk from, String ownerTO, String ownerFROM) {
-        if (instance.getSettings().getBooleanSetting("enter-leave-messages")) {
+		if(player.getLocation().getBlockY() <= 63) return;
+		if (instance.getSettings().getBooleanSetting("enter-leave-messages")) {
             enterleaveMessages(player, to, from, ownerTO, ownerFROM);
         }
         if (instance.getSettings().getBooleanSetting("enter-leave-chat-messages")) {
@@ -2041,7 +2096,8 @@ public class ClaimEvents implements Listener {
      * @param ownerFROM the owner of the chunk the player is leaving.
      */
     private void enterleaveChatMessages(Player player, Chunk to, Chunk from, String ownerTO, String ownerFROM) {
-        String playerName = player.getName();
+		if(player.getLocation().getBlockY() <= 63) return;
+		String playerName = player.getName();
         String toName = instance.getMain().getClaimNameByChunk(to);
         String fromName = instance.getMain().getClaimNameByChunk(from);
 
@@ -2095,7 +2151,8 @@ public class ClaimEvents implements Listener {
      * @param ownerFROM the owner of the chunk the player is leaving.
      */
     private void enterleaveMessages(Player player, Chunk to, Chunk from, String ownerTO, String ownerFROM) {
-        String playerName = player.getName();
+		if(player.getLocation().getBlockY() <= 63) return;
+		String playerName = player.getName();
         String toName = instance.getMain().getClaimNameByChunk(to);
         String fromName = instance.getMain().getClaimNameByChunk(from);
 
@@ -2147,7 +2204,8 @@ public class ClaimEvents implements Listener {
      * @param ownerFROM the owner of the chunk the player is leaving.
      */
     private void enterleavetitleMessages(Player player, Chunk to, Chunk from, String ownerTO, String ownerFROM) {
-        String toName = instance.getMain().getClaimNameByChunk(to);
+		if(player.getLocation().getBlockY() <= 63) return;
+		String toName = instance.getMain().getClaimNameByChunk(to);
         String fromName = instance.getMain().getClaimNameByChunk(from);
         String playerName = player.getName();
         
@@ -2227,6 +2285,7 @@ public class ClaimEvents implements Listener {
      * @param message The message key to send.
      */
     private void cancelTeleport(ProjectileHitEvent event, Player player, String message) {
+		if(event.getHitBlock().getLocation().getBlockY() <= 63) return;
     	event.getEntity().remove();
     	event.setCancelled(true);
         instance.getMain().sendMessage(player, instance.getLanguage().getMessage(message), instance.getSettings().getSetting("protection-message"));
