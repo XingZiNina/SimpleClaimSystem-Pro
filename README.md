@@ -1,30 +1,16 @@
-# SimpleClaimSystem
-SimpleClaimSystem is a plugin allowing you to protect your constructions, it works with chunks. The claims are fully configurable (settings, members, bans, name, description, chunks, sales..).
+[![Java](https://img.shields.io/badge/Java-21+-orange.svg)](https://www.oracle.com/java/)
+[![Gradle](https://img.shields.io/badge/Gradle-9.2.1-02303A.svg)](https://gradle.org/)
+[![License](https://img.shields.io/badge/License-GPL_3.0-blue.svg)](LICENSE)
+[![Bukkit](https://img.shields.io/badge/API-1.18--1.21-green.svg)](https://www.spigotmc.org/)
 
-## Compatibility
-|                      Software                       |    Version    |
-|:---------------------------------------------------:|:-------------:|
-|    [PaperMC](https://papermc.io/downloads/paper)    |     1.18+     |
-|           [Purpur](https://purpurmc.org)            |     1.18+     |
-|     [Folia](https://papermc.io/software/folia)      |     1.18+     |
-|         [Spigot](https://www.spigotmc.org)          |     1.18+     |
+# Areas where it is currently better than the original version
 
+- It has changed from protecting an entire block to not protecting below sea level (don’t worry, this y-axis is based on the blocks stepped on when the block was created).
 
-## Support
-|        Plugin        |     Link     |
-|:--------------------:|:------------:|
-| PlaceholderAPI       | [Download](https://www.spigotmc.org/resources/placeholderapi.6245/)    |
-| GriefPrevention      | [Download](https://www.spigotmc.org/resources/griefprevention.1884/)    |
-| Vault                | [Download](https://www.spigotmc.org/resources/vault.34315/)    |
-| Dynmap               | [Download](https://www.spigotmc.org/resources/dynmap.274/)    |
-| Bluemap              | [Download](https://bluemap.bluecolored.de/)    |
-| Pl3xmap              | [Download](https://modrinth.com/mod/pl3xmap)    |
+- Remove the restriction that only letters and numbers can be used for territory names, and change it so that all characters can be used as territory names (you can even use a flag as a territory name UWU)
 
+- Import more language files during plugin initialization instead of just English. Also fix the issue where the set-lang command does not work.
 
-## Useful links
-### - Wiki ([here](https://xyness.gitbook.io/simpleclaimsystem))
-### - Discord ([here](https://discord.gg/6sRTGprM95))
+- Optimize the loading interface so that it looks simple yet sophisticated.
 
-
-## bStats
-[![](https://bstats.org/signatures/bukkit/SimpleCLaimSystem.svg)]([https://bstats.org/plugin/bukkit/SimpleClaimSystem/21435](https://bstats.org/plugin/bukkit/SimpleClaimSystem/21435))
+- Upgrade the plugins it relies on to make them work better
