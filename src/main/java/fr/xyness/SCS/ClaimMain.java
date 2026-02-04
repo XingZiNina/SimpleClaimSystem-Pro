@@ -2200,7 +2200,11 @@ public class ClaimMain {
 		        if (instance.getSettings().getBooleanSetting("dynmap")) instance.getDynmap().createClaimZone(newClaim);
 		        if (instance.getSettings().getBooleanSetting("bluemap")) instance.getBluemap().createClaimZone(newClaim);
 		        if (instance.getSettings().getBooleanSetting("pl3xmap")) instance.getPl3xMap().createClaimZone(newClaim);
+<<<<<<< HEAD
                 if (instance.getSettings().getBooleanSetting("squaremap")) instance.getSquaremap().createClaimZone(newClaim);
+=======
+		        if (instance.getSettings().getBooleanSetting("squaremap")) instance.getSquaremap().createClaimZone(newClaim);
+>>>>>>> d8179fc0bbc720d32276ff1a971477b739e6cb1d
 		        if (instance.getSettings().getBooleanSetting("keep-chunks-loaded")) {
 	            	if(instance.isFolia()) {
 	            		Bukkit.getRegionScheduler().execute(instance, chunk.getWorld(), chunk.getX(), chunk.getZ(), () -> chunk.setForceLoaded(true));
@@ -2283,7 +2287,11 @@ public class ClaimMain {
 		        if (instance.getSettings().getBooleanSetting("dynmap")) instance.getDynmap().createClaimZone(newClaim);
 		        if (instance.getSettings().getBooleanSetting("bluemap")) instance.getBluemap().createClaimZone(newClaim);
 		        if (instance.getSettings().getBooleanSetting("pl3xmap")) instance.getPl3xMap().createClaimZone(newClaim);
+<<<<<<< HEAD
                 if (instance.getSettings().getBooleanSetting("squaremap")) instance.getSquaremap().createClaimZone(newClaim);
+=======
+		        if (instance.getSettings().getBooleanSetting("squaremap")) instance.getSquaremap().createClaimZone(newClaim);
+>>>>>>> d8179fc0bbc720d32276ff1a971477b739e6cb1d
 		        if (instance.getSettings().getBooleanSetting("keep-chunks-loaded")) {
 	            	if(instance.isFolia()) {
 	            		Bukkit.getRegionScheduler().execute(instance, chunk.getWorld(), chunk.getX(), chunk.getZ(), () -> chunk.setForceLoaded(true));
@@ -2807,7 +2815,17 @@ public class ClaimMain {
             }
         });
     }
+<<<<<<< HEAD
 
+=======
+    
+    /**
+     * Method to apply current settings to all owner's claims.
+     *
+     * @param claim the claim from which to apply settings to all player's claims
+     * @return true if the operation was successful, false otherwise
+     */
+>>>>>>> d8179fc0bbc720d32276ff1a971477b739e6cb1d
     public CompletableFuture<Boolean> applyAllSettings(Claim claim) {
     	return CompletableFuture.supplyAsync(() -> {
             try {
@@ -3209,8 +3227,13 @@ public class ClaimMain {
 	        	if (instance.getSettings().getBooleanSetting("dynmap")) instance.getDynmap().updateName(claim);
 	        	if (instance.getSettings().getBooleanSetting("bluemap")) instance.getBluemap().updateName(claim);
 	        	if (instance.getSettings().getBooleanSetting("pl3xmap")) instance.getPl3xMap().updateName(claim);
+<<<<<<< HEAD
                 if (instance.getSettings().getBooleanSetting("squaremap")) instance.getSquaremap().updateName(claim);
 	        	
+=======
+	        	if (instance.getSettings().getBooleanSetting("squaremap")) instance.getSquaremap().updateName(claim);
+
+>>>>>>> d8179fc0bbc720d32276ff1a971477b739e6cb1d
 	        	// Update database
 	            try (Connection connection = instance.getDataSource().getConnection()) {
 	                String updateQuery = "UPDATE scs_claims_1 SET claim_name = ? WHERE owner_uuid = ? AND claim_name = ?";
@@ -3286,9 +3309,13 @@ public class ClaimMain {
 	        	Set<Chunk> chunks = claim.getChunks();
 	        	instance.executeSync(() -> instance.getBossBars().deactivateBossBar(chunks));
 	        	if (instance.getSettings().getBooleanSetting("dynmap")) instance.getDynmap().deleteMarker(chunks);
-	        	if (instance.getSettings().getBooleanSetting("bluemap")) instance.getBluemap().deleteMarker(chunks);
+	        	if (instance.getSettings().getBooleanSetting("bluemap")) instance.getBluemap().deleteMarker(claim);
 	        	if (instance.getSettings().getBooleanSetting("pl3xmap")) instance.getPl3xMap().deleteMarker(chunks);
+<<<<<<< HEAD
                 if (instance.getSettings().getBooleanSetting("squaremap")) instance.getSquaremap().deleteMarker(claim);
+=======
+	        	if (instance.getSettings().getBooleanSetting("squaremap")) instance.getSquaremap().deleteMarker(claim);
+>>>>>>> d8179fc0bbc720d32276ff1a971477b739e6cb1d
 	        	chunks.stream().forEach(c -> listClaims.remove(c));
                 resetWeatherChunk(claim);
                 resetFlyChunk(claim);
@@ -3357,7 +3384,7 @@ public class ClaimMain {
                     Set<Chunk> chunks = claim.getChunks();
                     instance.executeSync(() -> instance.getBossBars().deactivateBossBar(chunks));
                     if (instance.getSettings().getBooleanSetting("dynmap")) instance.getDynmap().deleteMarker(chunks);
-                    if (instance.getSettings().getBooleanSetting("bluemap")) instance.getBluemap().deleteMarker(chunks);
+                    if (instance.getSettings().getBooleanSetting("bluemap")) instance.getBluemap().deleteMarker(claim);
                     if (instance.getSettings().getBooleanSetting("pl3xmap")) instance.getPl3xMap().deleteMarker(chunks);
                     if (instance.getSettings().getBooleanSetting("squaremap")) instance.getSquaremap().deleteMarker(claim);
                     chunks.stream().forEach(c -> listClaims.remove(c));
@@ -3543,7 +3570,17 @@ public class ClaimMain {
             }
         });
     }
+<<<<<<< HEAD
 
+=======
+    
+    /**
+     * Method to reset settings of claim
+     * 
+     * @param claim The target claim
+     * @return true if the operation was successful, false otherwise
+     */
+>>>>>>> d8179fc0bbc720d32276ff1a971477b739e6cb1d
     public CompletableFuture<Boolean> resetClaimSettings(Claim claim) {
         return CompletableFuture.supplyAsync(() -> {
             try {
@@ -3617,6 +3654,15 @@ public class ClaimMain {
         });
     }
 
+<<<<<<< HEAD
+=======
+    /**
+     * Method when a claim is sold.
+     *
+     * @param player player buying the claim
+     * @param claim the claim
+     */
+>>>>>>> d8179fc0bbc720d32276ff1a971477b739e6cb1d
     public CompletableFuture<Boolean> sellChunk(Player player, Claim claim) {
         return CompletableFuture.supplyAsync(() -> {
             try {
@@ -3710,6 +3756,15 @@ public class ClaimMain {
         });
     }
 
+<<<<<<< HEAD
+=======
+    /**
+     * Method to change the owner of a claim.
+     *
+     * @param playerName the name of the new owner
+     * @param claim the claim
+     */
+>>>>>>> d8179fc0bbc720d32276ff1a971477b739e6cb1d
     public CompletableFuture<Boolean> setOwner(String playerName, Claim claim) {
         return CompletableFuture.supplyAsync(() -> {
             try {
@@ -3798,7 +3853,18 @@ public class ClaimMain {
             }
         });
     }
+<<<<<<< HEAD
 
+=======
+    
+    /**
+     * Method to change the owner of a claim.
+     *
+     * @param newOwner the new owner of the claims
+     * @param claims the claims
+     * @param oldOwner The owner of the claims
+     */
+>>>>>>> d8179fc0bbc720d32276ff1a971477b739e6cb1d
     public CompletableFuture<Boolean> setOwner(String newOwner, CustomSet<Claim> claims, String oldOwner) {
         return CompletableFuture.supplyAsync(() -> {
             try {
@@ -4191,7 +4257,18 @@ public class ClaimMain {
             }
         });
     }
+<<<<<<< HEAD
 
+=======
+    
+    /**
+     * Displays particles around the specified chunks for claiming.
+     * Particles are shown only at the borders of the chunks and not between adjacent chunks.
+     *
+     * @param player the player claiming the chunks
+     * @param chunks the set of chunks to be displayed
+     */
+>>>>>>> d8179fc0bbc720d32276ff1a971477b739e6cb1d
     public void displayChunksNotEnter(Player player, CustomSet<Chunk> chunks) {
     	
     	if(chunksParticles.containsAll(chunks)) return;
@@ -4813,7 +4890,16 @@ public class ClaimMain {
     	if(claim == null) return instance.getLanguage().getMessage("map-claim-relation-visitor");
     	return checkMembre(claim, player) ? instance.getLanguage().getMessage("map-claim-relation-member") : instance.getLanguage().getMessage("map-claim-relation-visitor");
     }
+<<<<<<< HEAD
 
+=======
+    
+    /**
+     * Method to update the weather in the claim.
+     *
+     * @param claim the claim to be updated
+     */
+>>>>>>> d8179fc0bbc720d32276ff1a971477b739e6cb1d
     public void updateWeatherChunk(Claim claim) {
 		Set<Chunk> chunks = claim.getChunks();
 		if(instance.isFolia()) {
@@ -4845,6 +4931,14 @@ public class ClaimMain {
 		}
     }
 
+<<<<<<< HEAD
+=======
+    /**
+     * Method to update the fly in the claim.
+     *
+     * @param claim The claim to be updated
+     */
+>>>>>>> d8179fc0bbc720d32276ff1a971477b739e6cb1d
     public void updateFlyChunk(Claim claim) {
 		Set<Chunk> chunks = claim.getChunks();
 		if(!instance.isFolia()) {
@@ -4867,7 +4961,16 @@ public class ClaimMain {
 	    	});
 		}
     }
+<<<<<<< HEAD
 
+=======
+    
+    /**
+     * Method to reset the weather in the claim.
+     *
+     * @param claim the claim to be updated
+     */
+>>>>>>> d8179fc0bbc720d32276ff1a971477b739e6cb1d
     public void resetWeatherChunk(Claim claim) {
 		Set<Chunk> chunks = claim.getChunks();
 		if(instance.isFolia()) {
@@ -4889,6 +4992,14 @@ public class ClaimMain {
 		}
     }
 
+<<<<<<< HEAD
+=======
+    /**
+     * Method to reset the fly in the claim.
+     *
+     * @param claim The claim to be updated
+     */
+>>>>>>> d8179fc0bbc720d32276ff1a971477b739e6cb1d
     public void resetFlyChunk(Claim claim) {
 		Set<Chunk> chunks = claim.getChunks();
 		if(instance.isFolia()) {

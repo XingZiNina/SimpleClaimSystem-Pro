@@ -57,8 +57,13 @@ public class ClaimSquaremap {
      * Note: Call initializeLayers() after claims are loaded to display existing claims.
      */
     public ClaimSquaremap(SimpleClaimSystem instance) {
+<<<<<<< HEAD
         this.instance = instance;
         this.squaremapApi = SquaremapProvider.get();
+=======
+    	this.instance = instance;
+    	this.squaremapApi = SquaremapProvider.get();
+>>>>>>> d8179fc0bbc720d32276ff1a971477b739e6cb1d
     }
 
 
@@ -81,11 +86,19 @@ public class ClaimSquaremap {
                 if (mapWorld != null) {
                     Key layerKey = Key.of("simpleclaimsystem_claims");
                     SimpleLayerProvider provider = SimpleLayerProvider.builder("Claims")
+<<<<<<< HEAD
                             .showControls(true)
                             .defaultHidden(false)
                             .layerPriority(1)
                             .zIndex(1)
                             .build();
+=======
+                        .showControls(true)
+                        .defaultHidden(false)
+                        .layerPriority(1)
+                        .zIndex(1)
+                        .build();
+>>>>>>> d8179fc0bbc720d32276ff1a971477b739e6cb1d
 
                     mapWorld.layerRegistry().register(layerKey, provider);
                     layerProviders.put(world, provider);
@@ -93,7 +106,11 @@ public class ClaimSquaremap {
                     // Add existing claims to the map
                     for (Claim claim : claims) {
                         if (claim.getLocation().getWorld().equals(world)) {
+<<<<<<< HEAD
                             createClaimZone(claim);
+=======
+                        	createClaimZone(claim);
+>>>>>>> d8179fc0bbc720d32276ff1a971477b739e6cb1d
                         }
                     }
                 }
@@ -134,11 +151,19 @@ public class ClaimSquaremap {
             if (mapWorld != null) {
                 Key layerKey = Key.of("simpleclaimsystem_claims");
                 SimpleLayerProvider newProvider = SimpleLayerProvider.builder("Claims")
+<<<<<<< HEAD
                         .showControls(true)
                         .defaultHidden(false)
                         .layerPriority(1)
                         .zIndex(1)
                         .build();
+=======
+                    .showControls(true)
+                    .defaultHidden(false)
+                    .layerPriority(1)
+                    .zIndex(1)
+                    .build();
+>>>>>>> d8179fc0bbc720d32276ff1a971477b739e6cb1d
 
                 mapWorld.layerRegistry().register(layerKey, newProvider);
                 layerProviders.put(world, newProvider);
@@ -167,6 +192,7 @@ public class ClaimSquaremap {
 
         if (!outerBoundary.isEmpty()) {
             Marker marker = Polygon.polygon(outerBoundary)
+<<<<<<< HEAD
                     .markerOptions(
                             MarkerOptions.builder()
                                     .strokeColor(new Color(strokeColor))
@@ -176,6 +202,17 @@ public class ClaimSquaremap {
                                     .clickTooltip(hoverText)
                                     .build()
                     );
+=======
+                .markerOptions(
+                    MarkerOptions.builder()
+                        .strokeColor(new Color(strokeColor))
+                        .strokeWeight(2)
+                        .fillColor(new Color(fillColor))
+                        .fillOpacity(0.35)
+                        .clickTooltip(hoverText)
+                        .build()
+                );
+>>>>>>> d8179fc0bbc720d32276ff1a971477b739e6cb1d
 
             provider.addMarker(Key.of(claimMarkerId), marker);
         }
@@ -190,8 +227,13 @@ public class ClaimSquaremap {
 
         // Convert chunks to a set of coordinate pairs for easy lookup
         java.util.Set<String> chunkCoords = chunks.stream()
+<<<<<<< HEAD
                 .map(c -> c.getX() + "," + c.getZ())
                 .collect(Collectors.toSet());
+=======
+            .map(c -> c.getX() + "," + c.getZ())
+            .collect(Collectors.toSet());
+>>>>>>> d8179fc0bbc720d32276ff1a971477b739e6cb1d
 
         // Collect all outer edges (edges that don't have an adjacent chunk)
         List<Edge> outerEdges = new ArrayList<>();
@@ -276,6 +318,7 @@ public class ClaimSquaremap {
     }
 
     /**
+<<<<<<< HEAD
      * Helper class to represent an edge.
      */
     private record Edge(int x1, int z1, int x2, int z2) {
@@ -286,6 +329,18 @@ public class ClaimSquaremap {
             if (!(o instanceof Edge edge)) return false;
             return x1 == edge.x1 && z1 == edge.z1 && x2 == edge.x2 && z2 == edge.z2;
         }
+=======
+         * Helper class to represent an edge.
+         */
+        private record Edge(int x1, int z1, int x2, int z2) {
+
+        @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (!(o instanceof Edge edge)) return false;
+                return x1 == edge.x1 && z1 == edge.z1 && x2 == edge.x2 && z2 == edge.z2;
+            }
+>>>>>>> d8179fc0bbc720d32276ff1a971477b739e6cb1d
 
     }
 
@@ -319,4 +374,8 @@ public class ClaimSquaremap {
         }
     }
 
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> d8179fc0bbc720d32276ff1a971477b739e6cb1d

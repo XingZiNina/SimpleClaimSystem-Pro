@@ -71,6 +71,14 @@ public class SimpleClaimSystem extends JavaPlugin {
     private ClaimDynmap dynmapInstance;
     private ClaimBluemap bluemapInstance;
     private ClaimPl3xMap pl3xmapInstance;
+<<<<<<< HEAD
+=======
+
+    /** Instance of ClaimSquaremap for Squaremap integration */
+    private ClaimSquaremap squaremapInstance;
+
+    /** Instance of ClaimWorldguard for WorldGuard integration */
+>>>>>>> d8179fc0bbc720d32276ff1a971477b739e6cb1d
     private ClaimWorldGuard claimWorldguardInstance;
     private ClaimVault claimVaultInstance;
     private ClaimbStats bStatsInstance;
@@ -256,6 +264,17 @@ public class SimpleClaimSystem extends JavaPlugin {
                 claimSettingsInstance.addSetting("pl3xmap", "false");
             }
 
+<<<<<<< HEAD
+=======
+            Plugin squaremap = Bukkit.getPluginManager().getPlugin("squaremap");
+            if (squaremap != null) {
+                claimSettingsInstance.addSetting("squaremap", "true");
+            } else {
+                claimSettingsInstance.addSetting("squaremap", "false");
+            }
+
+            // Check "langs" folder
+>>>>>>> d8179fc0bbc720d32276ff1a971477b739e6cb1d
             File dossier = new File(getDataFolder(), "langs");
             if (!dossier.exists()) {
                 dossier.mkdirs();
@@ -548,16 +567,29 @@ public class SimpleClaimSystem extends JavaPlugin {
             claimSettingsInstance.addSetting("pl3xmap-claim-fill-color", getConfig().getString("pl3xmap-settings.claim-fill-color"));
             claimSettingsInstance.addSetting("pl3xmap-claim-hover-text", getConfig().getString("pl3xmap-settings.claim-hover-text"));
 
+<<<<<<< HEAD
             configC = getConfig().getString("squaremap");
             if(configC.equalsIgnoreCase("true") && claimSettingsInstance.getBooleanSetting("squaremap")) {
                 if (!reload) squaremapInstance = new ClaimSquaremap(this);
             } else {
                 claimSettingsInstance.addSetting("squaremap", "false");
+=======
+            // Add Squaremap settings
+            configC = getConfig().getString("squaremap");
+            if(configC.equalsIgnoreCase("true") && claimSettingsInstance.getBooleanSetting("squaremap")) {
+            	if (!reload) squaremapInstance = new ClaimSquaremap(this);
+            } else {
+            	claimSettingsInstance.addSetting("squaremap", "false");
+>>>>>>> d8179fc0bbc720d32276ff1a971477b739e6cb1d
             }
             claimSettingsInstance.addSetting("squaremap-claim-border-color", getConfig().getString("squaremap-settings.claim-border-color"));
             claimSettingsInstance.addSetting("squaremap-claim-fill-color", getConfig().getString("squaremap-settings.claim-fill-color"));
             claimSettingsInstance.addSetting("squaremap-claim-hover-text", getConfig().getString("squaremap-settings.claim-hover-text"));
 
+<<<<<<< HEAD
+=======
+            // Add the message type for protection
+>>>>>>> d8179fc0bbc720d32276ff1a971477b739e6cb1d
             configC = getConfig().getString("protection-message");
             if (configC.equalsIgnoreCase("action_bar") || 
                     configC.equalsIgnoreCase("title") ||
@@ -781,6 +813,16 @@ public class SimpleClaimSystem extends JavaPlugin {
 
             claimBossBarInstance.loadBossbarSettings();
             claimInstance.loadClaims();
+<<<<<<< HEAD
+=======
+
+            // Initialize map integrations after claims are loaded
+            if (claimSettingsInstance.getBooleanSetting("squaremap") && squaremapInstance != null) {
+                squaremapInstance.initializeLayers();
+            }
+
+            // Load players
+>>>>>>> d8179fc0bbc720d32276ff1a971477b739e6cb1d
             cPlayerMainInstance.loadPlayers();
 
             if (claimSettingsInstance.getBooleanSetting("squaremap") && squaremapInstance != null) {
@@ -1727,15 +1769,40 @@ public class SimpleClaimSystem extends JavaPlugin {
     public ClaimBluemap getBluemap() {
         return bluemapInstance;
     }
+<<<<<<< HEAD
 
+=======
+    
+    /**
+     * Returns the ClaimPl3xMap instance.
+     *
+     * @return The ClaimPl3xMap instance
+     */
+>>>>>>> d8179fc0bbc720d32276ff1a971477b739e6cb1d
     public ClaimPl3xMap getPl3xMap() {
         return pl3xmapInstance;
     }
 
+<<<<<<< HEAD
+=======
+    /**
+     * Returns the ClaimSquaremap instance.
+     *
+     * @return The ClaimSquaremap instance
+     */
+>>>>>>> d8179fc0bbc720d32276ff1a971477b739e6cb1d
     public ClaimSquaremap getSquaremap() {
         return squaremapInstance;
     }
 
+<<<<<<< HEAD
+=======
+    /**
+     * Returns the ClaimPurge instance.
+     * 
+     * @return The ClaimPurge instance
+     */
+>>>>>>> d8179fc0bbc720d32276ff1a971477b739e6cb1d
     public ClaimPurge getAutopurge() {
         return claimPurgeInstance;
     }

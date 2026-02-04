@@ -37,9 +37,14 @@ repositories {
 }
 
 dependencies {
+    implementation("com.mojang:authlib:1.5.21")
+    implementation("com.zaxxer:HikariCP:4.0.3")
+    implementation("com.technicjelle:BMUtils:4.3.1")
+    compileOnly("com.flowpowered:flow-math:1.0.3")
     compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
     compileOnly("org.geysermc.floodgate:api:2.2.3-SNAPSHOT")
     compileOnly("dev.folia:folia-api:1.20.4-R0.1-SNAPSHOT")
+<<<<<<< HEAD
     implementation("com.technicjelle:BMUtils:4.3.1")
     implementation("com.zaxxer:HikariCP:7.0.2")
     implementation("com.mojang:authlib:1.5.21")
@@ -49,7 +54,15 @@ dependencies {
     compileOnly("net.momirealms:craft-engine-adventure:0.0.67")
     compileOnly("xyz.jpenilla", "squaremap-api", "1.3.11")
     compileOnly(files("libs/PlaceholderAPI-2.11.7.jar"))
+=======
+>>>>>>> d8179fc0bbc720d32276ff1a971477b739e6cb1d
     compileOnly("com.github.LoneDev6:api-itemsadder:3.6.1")
+    compileOnly("de.bluecolored.bluemap:BlueMapAPI:2.7.2")
+    compileOnly("maven.modrinth:pl3xmap:1.21-500")
+    compileOnly("com.github.GriefPrevention:GriefPrevention:16.18.2")
+    compileOnly("net.md-5:bungeecord-chat:1.16-R0.4")
+    compileOnly(files("libs/PlaceholderAPI-2.11.6.jar"))
+    compileOnly(files("libs/Dynmap-3.7-beta-6-spigot.jar"))
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.4") {
         exclude(group = "org.bstats", module = "bstats-bukkit")
     }
@@ -57,6 +70,7 @@ dependencies {
     compileOnly("com.github.MilkBowl:VaultAPI:1.7") {
         exclude(group = "org.bukkit", module = "bukkit")
     }
+<<<<<<< HEAD
 
     compileOnly(files("libs/Dynmap-3.7-beta-6-spigot.jar"))
     compileOnly("de.bluecolored.bluemap:BlueMapAPI:2.7.2")
@@ -64,6 +78,8 @@ dependencies {
     compileOnly("com.github.GriefPrevention:GriefPrevention:16.18.2")
     compileOnly("net.md-5:bungeecord-chat:1.21-R0.4")
 
+=======
+>>>>>>> d8179fc0bbc720d32276ff1a971477b739e6cb1d
     testImplementation("org.junit.jupiter:junit-jupiter-engine:5.7.1")
     testImplementation("org.junit.jupiter:junit-jupiter-params:5.7.1")
 }

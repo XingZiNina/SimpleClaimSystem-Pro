@@ -209,6 +209,10 @@ squaremap-settings:
   claim-border-color: FFFFFF
   claim-fill-color: A5A5A5
   claim-hover-text: "%claim-name% - Owner: %owner%"
+<<<<<<< HEAD
+=======
+
+>>>>>>> d8179fc0bbc720d32276ff1a971477b739e6cb1d
 
 # **************************
 # *  Permissions settings  *
