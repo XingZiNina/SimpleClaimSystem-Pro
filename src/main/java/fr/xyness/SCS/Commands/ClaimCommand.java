@@ -57,9 +57,6 @@ import fr.xyness.SCS.Guis.ClaimListGui;
 import fr.xyness.SCS.Guis.ClaimMembersGui;
 import fr.xyness.SCS.Guis.ClaimMainGui;
 
-/**
- * Command executor and tab completer for the /claim command.
- */
 public class ClaimCommand implements CommandExecutor, TabCompleter {
 	
 	
@@ -67,18 +64,11 @@ public class ClaimCommand implements CommandExecutor, TabCompleter {
     // *  Variables  *
     // ***************
 	
-	
-    /** A map of players currently in the process of creating a claim. */
+
     public static Map<Player, Integer> isOnCreate = new HashMap<>();
-    
-    /** A map of players currently in the process of adding a chunk. */
     public static Map<Player, String> isOnAdd = new HashMap<>();
-    
-    /** A map of invitations */
     public static Map<Player, Map<Player,String>> invitations = new HashMap<>();
     public static Map<Player, Map<Player,LocalDateTime>> invitationsTime = new HashMap<>();
-	
-    /** Instance of SimpleClaimSystem */
     private SimpleClaimSystem instance;
     
     public static Set<String> commands = Set.of("settings", "add", "remove", "list", "setspawn", "setname", "members", "setdesc",
@@ -89,32 +79,13 @@ public class ClaimCommand implements CommandExecutor, TabCompleter {
     // ******************
     // *  Constructors  *
     // ******************
-    
-    
-    /**
-     * Constructor for ClaimCommand.
-     *
-     * @param instance The instance of the SimpleClaimSystem plugin.
-     */
     public ClaimCommand(SimpleClaimSystem instance) {
     	this.instance = instance;
     }
-
-    
     // ******************
     // *  Tab Complete  *
     // ******************
 
-    
-    /**
-     * Handles tab completion for the /claim command.
-     *
-     * @param sender the sender of the command
-     * @param cmd the command
-     * @param alias the alias of the command
-     * @param args the arguments provided to the command
-     * @return a list of possible completions for the final argument, or an empty list if none are applicable
-     */
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
         if (!(sender instanceof Player)) {
@@ -158,31 +129,21 @@ public class ClaimCommand implements CommandExecutor, TabCompleter {
     // *  Main command  *
     // ******************
 
-    
-    /**
-     * Handles the execution of the /claim command.
-     *
-     * @param sender  the command sender
-     * @param command the command
-     * @param label   the command label
-     * @param args    the command arguments
-     * @return true if the command was successful, false otherwise
-     */
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-    	// If the sender is not a player
         if (!(sender instanceof Player)) {
             sender.sendMessage(instance.getLanguage().getMessage("command-only-by-players"));
             return true;
         }
 
-        // Get data
         Player player = (Player) sender;
         String playerName = player.getName();
         CPlayer cPlayer = instance.getPlayerMain().getCPlayer(player.getUniqueId());
-
-        // Check if for desc (so there are many arguments)
+        if (cPlayer == null) {
+            player.sendMessage(instance.getLanguage().getMessage("error"));
+            return true;
+        }
         if (args.length > 1 && args[0].equals("setdesc")) {
         	handleDesc(player, playerName, args);
             return true;
