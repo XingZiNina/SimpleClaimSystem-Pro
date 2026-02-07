@@ -18,3 +18,5 @@
 - Added support for SquareMap (user James-P-Bennett)
 
 - Optimize BlueMap display (user draugael)
+
+- Fixed the issue where cPlayer could be null in certain situations and added a cPlayer check
