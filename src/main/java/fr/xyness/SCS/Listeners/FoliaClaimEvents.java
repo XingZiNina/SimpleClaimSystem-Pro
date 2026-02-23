@@ -262,14 +262,6 @@ public class FoliaClaimEvents implements Listener {
         instance.getMain().sendMessage(player, instance.getLanguage().getMessage(message), instance.getSettings().getSetting("protection-message"));
     }
 
-    /**
-     * Checks if the teleport is blocked based on permissions and teleport causes.
-     *
-     * @param event   The player teleport event.
-     * @param player  The player.
-     * @param toChunk The destination chunk.
-     * @return True if the teleport is blocked, false otherwise.
-     */
     private boolean isTeleportBlocked(PlayerTeleportEvent event, Player player, Claim claim) {
         if (!instance.getPlayerMain().checkPermPlayer(player, "scs.bypass") && !claim.getPermissionForPlayer("Teleportations",player)) {
             switch (event.getCause()) {
@@ -282,13 +274,7 @@ public class FoliaClaimEvents implements Listener {
         }
         return false;
     }
-    
-    /**
-     * Handles weather settings for the player.
-     *
-     * @param player The player.
-     * @param chunk  The chunk.
-     */
+
     private void handleWeatherSettings(Player player, Chunk to, Chunk from) {
     	Claim claimTo = instance.getMain().getClaim(to);
     	Claim claimFrom = instance.getMain().getClaim(from);

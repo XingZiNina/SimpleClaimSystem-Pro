@@ -25,7 +25,6 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -44,12 +43,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.dynmap.DynmapAPI;
 import org.dynmap.markers.MarkerAPI;
 import org.dynmap.markers.MarkerSet;
-
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-
 import de.bluecolored.bluemap.api.BlueMapAPI;
-
 import fr.xyness.SCS.Commands.*;
 import fr.xyness.SCS.Config.ClaimGuis;
 import fr.xyness.SCS.Config.ClaimLanguage;
@@ -60,14 +56,7 @@ import fr.xyness.SCS.Support.*;
 import fr.xyness.SCS.Types.WorldMode;
 import net.md_5.bungee.api.ChatColor;
 
-
 public class SimpleClaimSystem extends JavaPlugin {
-    
-	
-    // ***************
-    // *  Variables  *
-    // ***************
-
     private ClaimDynmap dynmapInstance;
     private ClaimBluemap bluemapInstance;
     private ClaimPl3xMap pl3xmapInstance;

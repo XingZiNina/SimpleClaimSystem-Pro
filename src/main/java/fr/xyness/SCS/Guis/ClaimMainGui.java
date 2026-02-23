@@ -97,9 +97,13 @@ public class ClaimMainGui implements InventoryHolder {
     	return CompletableFuture.supplyAsync(() -> {
     	
 	    	// Get player data
-	        CPlayer cPlayer = instance.getPlayerMain().getCPlayer(player.getUniqueId());
-	        
-	        // Update player data (gui)
+			CPlayer cPlayer = instance.getPlayerMain().getOrCreateCPlayer(player);
+			if (cPlayer == null) {
+				instance.getLogger().severe("Failed to create CPlayer for player: " + player.getName());
+				return false;
+			}
+
+			// Update player data (gui)
 	        cPlayer.setClaim(claim);
 
 	        // Items

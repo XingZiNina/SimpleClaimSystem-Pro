@@ -103,8 +103,12 @@ public class AdminGestionClaimGui implements InventoryHolder {
 	        String default_choix_enabled = instance.getLanguage().getMessage("choice-enabled");
 	
 	        String choix;
-	        CPlayer cPlayer = instance.getPlayerMain().getCPlayer(player.getUniqueId());
-	        cPlayer.setClaim(claim);
+            CPlayer cPlayer = instance.getPlayerMain().getOrCreateCPlayer(player);
+            if (cPlayer == null) {
+                instance.getLogger().severe("Failed to create CPlayer for player: " + player.getName());
+                return false;
+            }
+            cPlayer.setClaim(claim);
 	        cPlayer.setFilter(role);
 	        cPlayer.setOwner(claim.getOwner());
 	        inv.setItem(48, role(role));
@@ -203,13 +207,7 @@ public class AdminGestionClaimGui implements InventoryHolder {
         }
         return item;
     }
-    
-    /**
-     * Get the index of the current role.
-     * 
-     * @param filter The current role.
-     * @return The index of the role.
-     */
+
     private int getStatusIndex(String role) {
         switch (role) {
             case "members":

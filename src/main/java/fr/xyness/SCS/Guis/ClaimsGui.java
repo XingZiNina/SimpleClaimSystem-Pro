@@ -94,9 +94,12 @@ public class ClaimsGui implements InventoryHolder {
     	return CompletableFuture.supplyAsync(() -> {
     	
 	    	// Get player data
-	        CPlayer cPlayer = instance.getPlayerMain().getCPlayer(player.getUniqueId());
-	        
-	        // Get claims data
+			CPlayer cPlayer = instance.getPlayerMain().getOrCreateCPlayer(player);
+			if (cPlayer == null) {
+				instance.getLogger().severe("Failed to create CPlayer for player: " + player.getName());
+				return false;
+			}
+			// Get claims data
 	        Map<String, Integer> owners = getOwnersByFilter(filter);
 	        LinkedHashMap<String, Integer> sortedOwners = owners.entrySet()
 	                .stream()
