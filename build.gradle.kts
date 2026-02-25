@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "fr.xyness"
-version = "11.45.14"
+version = "11.45.14-1"
 
 java {
     toolchain {
@@ -89,8 +89,8 @@ tasks.shadowJar {
     dependencies {
         include(dependency("com.zaxxer:HikariCP:7.0.2"))
         include(dependency("org.slf4j:slf4j-api:2.0.9"))
+        include(dependency("com.technicjelle:BMUtils:4.3.1"))
     }
-
     exclude("META-INF/*.SF")
     exclude("META-INF/*.DSA")
     exclude("META-INF/*.RSA")
