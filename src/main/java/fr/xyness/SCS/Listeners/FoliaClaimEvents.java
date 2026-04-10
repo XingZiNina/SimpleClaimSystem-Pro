@@ -45,6 +45,10 @@ public class FoliaClaimEvents implements Listener {
     public FoliaClaimEvents(SimpleClaimSystem instance) {
     	this.instance = instance;
     }
+
+    private boolean isBelowPlayerY(Player player, Location loc) {
+        return loc.getBlockY() < player.getLocation().getBlockY() - 16;
+    }
     
     
     
@@ -148,6 +152,7 @@ public class FoliaClaimEvents implements Listener {
     public void onPlayerPickupItem(PlayerAttemptPickupItemEvent event) {
     	Chunk chunk = event.getItem().getLocation().getChunk();
     	Player player = event.getPlayer();
+    	if(isBelowPlayerY(player, event.getItem().getLocation())) return;
     	WorldMode mode = instance.getSettings().getWorldMode(player.getWorld().getName());
     	if(instance.getPlayerMain().checkPermPlayer(player, "scs.bypass")) return;
 		if(instance.getMain().checkIfClaimExists(chunk)) {

@@ -882,6 +882,7 @@ public class ClaimMain {
         if (loc == null) return;
 
         CPlayer cPlayer = instance.getPlayerMain().getCPlayer(player.getUniqueId());
+        if(cPlayer == null) return;
         int delay = cPlayer.getDelay();
 
         if (instance.getPlayerMain().checkPermPlayer(player, "scs.bypass") || delay == 0) {
@@ -2209,6 +2210,7 @@ public class ClaimMain {
 		        String playerName = player.getName();
 		        UUID playerId = player.getUniqueId();
 		        CPlayer cPlayer = instance.getPlayerMain().getCPlayer(playerId);
+		        if(cPlayer == null) return false;
 		
 		        // Update player claims count
 		        cPlayer.setClaimsCount(cPlayer.getClaimsCount() + 1);
@@ -2395,6 +2397,7 @@ public class ClaimMain {
 	            String playerName = player.getName();
 	            UUID playerId = player.getUniqueId();
 	            CPlayer cPlayer = instance.getPlayerMain().getCPlayer(playerId);
+            if(cPlayer == null) return false;
 	
 	            // Get uuid of the player
 	            String uuid = player.getUniqueId().toString();
@@ -3367,6 +3370,7 @@ public class ClaimMain {
 	            	Player player = Bukkit.getPlayer(uuid);
 		            if (player != null && player.isOnline()) {
 	    	            CPlayer cPlayer = instance.getPlayerMain().getCPlayer(uuid);
+	    	            if(cPlayer == null) return false;
 	    	            cPlayer.setClaimsCount(cPlayer.getClaimsCount() - 1);
 		            }
                 }
@@ -3417,6 +3421,7 @@ public class ClaimMain {
 	            	Player player = Bukkit.getPlayer(owner);
 		            if (player != null && player.isOnline()) {
 			            CPlayer cPlayer = instance.getPlayerMain().getCPlayer(player.getUniqueId());
+			            if(cPlayer == null) return false;
 			            cPlayer.setClaimsCount(0);
 		            }
 	            }
@@ -3735,6 +3740,7 @@ public class ClaimMain {
 		            Player ownerP = Bukkit.getPlayer(owner);
 		            if (ownerP != null && ownerP.isOnline()) {
 		                CPlayer cOwner = instance.getPlayerMain().getCPlayer(uuid);
+		                if(cOwner == null) return false;
 		                cOwner.setClaimsCount(cOwner.getClaimsCount() - 1);
 		            }
 	            }
@@ -3744,8 +3750,9 @@ public class ClaimMain {
 	            if (playerClaims.get(uuid).isEmpty()) playerClaims.remove(uuid);
 	            
 	            // Set uuid of the new owner and update their claims count
-		        CPlayer cTarget = instance.getPlayerMain().getCPlayer(playerId);
-		        cTarget.setClaimsCount(cTarget.getClaimsCount() + 1);
+	        CPlayer cTarget = instance.getPlayerMain().getCPlayer(playerId);
+	        if(cTarget == null) return false;
+	        cTarget.setClaimsCount(cTarget.getClaimsCount() + 1);
 	            
 	            // Set the new owner to him
 	            claim.setOwner(playerName);
@@ -3829,6 +3836,7 @@ public class ClaimMain {
 		            Player ownerP = Bukkit.getPlayer(owner);
 		            if (ownerP != null && ownerP.isOnline()) {
 		                CPlayer cOwner = instance.getPlayerMain().getCPlayer(uuid);
+		                if(cOwner == null) return false;
 		                cOwner.setClaimsCount(cOwner.getClaimsCount() - 1);
 		            }
 	            } else {
@@ -3845,6 +3853,7 @@ public class ClaimMain {
 	            Player player = Bukkit.getPlayer(playerName);
 	            if (player != null && player.isOnline()) {
 	                CPlayer cTarget = instance.getPlayerMain().getCPlayer(uuidNewOwner);
+	                if(cTarget == null) return false;
 	                cTarget.setClaimsCount(cTarget.getClaimsCount() + 1);
 	            }
 	            
@@ -3925,6 +3934,7 @@ public class ClaimMain {
 		            Player ownerP = Bukkit.getPlayer(oldOwner);
 		            if (ownerP != null && ownerP.isOnline()) {
 		                CPlayer cOwner = instance.getPlayerMain().getCPlayer(uuid_real);
+		                if(cOwner == null) return false;
 		                cOwner.setClaimsCount(cOwner.getClaimsCount() - claims.size());
 		            }
 	            } else {
@@ -3941,6 +3951,7 @@ public class ClaimMain {
 	            Player player = Bukkit.getPlayer(newOwner);
 	            if (player != null && player.isOnline()) {
 	                CPlayer cTarget = instance.getPlayerMain().getCPlayer(uuidNewOwner);
+	                if(cTarget == null) return false;
 	                cTarget.setClaimsCount(cTarget.getClaimsCount() + claims.size());
 	            }
 	            
@@ -4271,6 +4282,7 @@ public class ClaimMain {
 		            if(player != null && player.isOnline()) {
 		            	// Update claims count of player
 			            CPlayer cPlayer = instance.getPlayerMain().getCPlayer(uuid);
+			            if(cPlayer == null) return false;
 			            cPlayer.setClaimsCount(cPlayer.getClaimsCount()-claims.size());
 		            }
 	            }
@@ -5008,6 +5020,7 @@ public class ClaimMain {
 				if(chunks.contains(c)) {
 					boolean value = claim.getPermissionForPlayer("Fly", p);
 	                CPlayer cPlayer = instance.getPlayerMain().getCPlayer(p.getUniqueId());
+	                if(cPlayer == null) return;
 	                if(value) {
 	                    if (cPlayer.getClaimAutofly()) {
 	                        instance.getPlayerMain().activePlayerFly(p);
@@ -5064,6 +5077,7 @@ public class ClaimMain {
 					Chunk c = p.getLocation().getChunk();
 					if(chunks.contains(c)) {
 		                CPlayer cPlayer = instance.getPlayerMain().getCPlayer(p.getUniqueId());
+		                if(cPlayer == null) return;
 		                if (cPlayer.getClaimFly()) {
 		                    instance.getPlayerMain().removePlayerFly(p);
 		                }
@@ -5095,6 +5109,7 @@ public class ClaimMain {
 		        	Chunk c = p.getLocation().getChunk();
 		        	if(chunks.contains(c)) {
 		        		CPlayer cPlayer = instance.getPlayerMain().getCPlayer(p.getUniqueId());
+		        		if(cPlayer == null) return;
 		        		if(cPlayer.getClaimAutomap()) {
 		        			getMap(p,c,true);
 		        		}
@@ -5106,6 +5121,7 @@ public class ClaimMain {
 	        	Chunk c = p.getLocation().getChunk();
 	        	if(chunks.contains(c)) {
 	        		CPlayer cPlayer = instance.getPlayerMain().getCPlayer(p.getUniqueId());
+	        		if(cPlayer == null) return;
 	        		if(cPlayer.getClaimAutomap()) {
 	        			getMap(p,c,true);
 	        		}

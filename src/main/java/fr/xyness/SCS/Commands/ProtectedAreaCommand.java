@@ -112,6 +112,10 @@ public class ProtectedAreaCommand implements CommandExecutor, TabCompleter {
         Player player = (Player) sender;
         String playerName = player.getName();
         CPlayer cPlayer = instance.getPlayerMain().getCPlayer(player.getUniqueId());
+        if (cPlayer == null) {
+            player.sendMessage(instance.getLanguage().getMessage("error"));
+            return true;
+        }
         
         // Check if for desc (so there are many arguments)
         if (args.length > 1 && args[0].equals("setdesc")) {

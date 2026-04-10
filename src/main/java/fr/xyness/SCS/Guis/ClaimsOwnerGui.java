@@ -86,6 +86,7 @@ public class ClaimsOwnerGui implements InventoryHolder {
     	
 	    	// Get player data
 	        CPlayer cPlayer = instance.getPlayerMain().getCPlayer(player.getUniqueId());
+	        if (cPlayer == null) return false;
 	        Set<Claim> claims = getClaims(filter, owner);
 	        List<Claim> claimList = new ArrayList<>(claims);
 	        Collections.sort(claimList, (claim1, claim2) -> claim1.getName().compareTo(claim2.getName()));

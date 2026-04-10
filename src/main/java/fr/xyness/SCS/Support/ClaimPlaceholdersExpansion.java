@@ -66,6 +66,7 @@ public class ClaimPlaceholdersExpansion extends PlaceholderExpansion {
         if (player == null) return "";
         
         CPlayer cPlayer = instance.getPlayerMain().getCPlayer(player.getUniqueId());
+        if (cPlayer == null) return "";
         
         CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
         	switch (identifier) {

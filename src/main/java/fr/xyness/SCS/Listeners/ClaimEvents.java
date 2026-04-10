@@ -597,6 +597,7 @@ public class ClaimEvents implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerBreak(BlockBreakEvent event){
 		Player player = event.getPlayer();
+		if(isBelowPlayerY(player, event.getBlock().getLocation())) return;
 		WorldMode mode = instance.getSettings().getWorldMode(player.getLocation().getWorld().getName());
 		if(instance.getPlayerMain().checkPermPlayer(player, "scs.bypass")) return;
 		Chunk chunk = event.getBlock().getLocation().getChunk();
@@ -639,6 +640,7 @@ public class ClaimEvents implements Listener {
 		if(instance.getMain().checkIfClaimExists(chunk)) {
 			if(damager instanceof Player) {
 				Player player = (Player) damager;
+				if(isBelowPlayerY(player, event.getVehicle().getLocation())) return;
 				if(instance.getPlayerMain().checkPermPlayer(player, "scs.bypass")) return;
 				Claim claim = instance.getMain().getClaim(chunk);
 				if(!claim.getPermissionForPlayer("Destroy", player)) {
@@ -671,6 +673,7 @@ public class ClaimEvents implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerPlace(BlockPlaceEvent event){
 		Player player = event.getPlayer();
+		if(isBelowPlayerY(player, event.getBlock().getLocation())) return;
 		if(instance.getPlayerMain().checkPermPlayer(player, "scs.bypass")) return;
 		WorldMode mode = instance.getSettings().getWorldMode(player.getLocation().getWorld().getName());
 		Block block = event.getBlock();
@@ -722,6 +725,7 @@ public class ClaimEvents implements Listener {
 	public void onHangingPlace(HangingPlaceEvent event) {
 		if(event.isCancelled()) return;
 		Player player = event.getPlayer();
+		if(player != null && isBelowPlayerY(player, event.getBlock().getLocation())) return;
 		if(instance.getPlayerMain().checkPermPlayer(player, "scs.bypass")) return;
 		WorldMode mode = instance.getSettings().getWorldMode(player.getLocation().getWorld().getName());
 		Chunk chunk = event.getBlock().getLocation().getChunk();
@@ -775,6 +779,7 @@ public class ClaimEvents implements Listener {
         	Chunk chunk = event.getEntity().getLocation().getChunk();
         	if(instance.getMain().checkIfClaimExists(chunk)) {
                 if (event.getRemover() instanceof Player player) {
+                	if(isBelowPlayerY(player, event.getEntity().getLocation())) return;
                 	if(instance.getPlayerMain().checkPermPlayer(player, "scs.bypass")) return;
                 	Claim claim = instance.getMain().getClaim(chunk);
                 	if(!claim.getPermissionForPlayer("Destroy", player)) {
@@ -808,6 +813,7 @@ public class ClaimEvents implements Listener {
     public void onBucketUse(PlayerBucketEmptyEvent event) {
 		if(event.isCancelled()) return;
 		Player player = event.getPlayer();
+		if(isBelowPlayerY(player, event.getBlock().getLocation())) return;
 		if(instance.getPlayerMain().checkPermPlayer(player, "scs.bypass")) return;
 		WorldMode mode = instance.getSettings().getWorldMode(player.getLocation().getWorld().getName());
 		Chunk chunk = event.getBlock().getLocation().getChunk();
@@ -832,6 +838,7 @@ public class ClaimEvents implements Listener {
     public void onBucketUse(PlayerBucketFillEvent event) {
 		if(event.isCancelled()) return;
 		Player player = event.getPlayer();
+		if(isBelowPlayerY(player, event.getBlock().getLocation())) return;
 		if(instance.getPlayerMain().checkPermPlayer(player, "scs.bypass")) return;
 		WorldMode mode = instance.getSettings().getWorldMode(player.getLocation().getWorld().getName());
 		Chunk chunk = event.getBlock().getLocation().getChunk();
@@ -857,6 +864,7 @@ public class ClaimEvents implements Listener {
 	@EventHandler
 	public void onPlayerFish(PlayerFishEvent event) {
 		Player player = event.getPlayer();
+		if(event.getCaught() != null && isBelowPlayerY(player, event.getCaught().getLocation())) return;
 		if(instance.getPlayerMain().checkPermPlayer(player, "scs.bypass")) return;
 		WorldMode mode = instance.getSettings().getWorldMode(player.getLocation().getWorld().getName());
 		if(event.getCaught() instanceof Entity) {
@@ -887,6 +895,7 @@ public class ClaimEvents implements Listener {
 	public void onEntityPlace(EntityPlaceEvent event) {
 		if(event.isCancelled()) return;
 		Player player = event.getPlayer();
+		if(player != null && isBelowPlayerY(player, event.getBlock().getLocation())) return;
 		if(instance.getPlayerMain().checkPermPlayer(player, "scs.bypass")) return;
 		WorldMode mode = instance.getSettings().getWorldMode(player.getLocation().getWorld().getName());
 		Chunk chunk = event.getBlock().getLocation().getChunk();
@@ -910,6 +919,7 @@ public class ClaimEvents implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerInteract(PlayerInteractEvent event) {
 		Player player = event.getPlayer();
+		if(event.getClickedBlock() != null && isBelowPlayerY(player, event.getClickedBlock().getLocation())) return;
 		if(instance.getPlayerMain().checkPermPlayer(player, "scs.bypass")) return;
 		WorldMode mode = instance.getSettings().getWorldMode(player.getLocation().getWorld().getName());
 		Block block = event.getClickedBlock();
@@ -1094,6 +1104,7 @@ public class ClaimEvents implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerInteractEntity(PlayerInteractAtEntityEvent event) {
     	Player player = event.getPlayer();
+    	if(isBelowPlayerY(player, event.getRightClicked().getLocation())) return;
     	if(instance.getPlayerMain().checkPermPlayer(player, "scs.bypass")) return;
 		WorldMode mode = instance.getSettings().getWorldMode(event.getRightClicked().getLocation().getWorld().getName());
 		Chunk chunk = event.getRightClicked().getLocation().getChunk();
@@ -1147,6 +1158,7 @@ public class ClaimEvents implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerInteractEntity2(PlayerInteractEntityEvent event) {
     	Player player = event.getPlayer();
+    	if(isBelowPlayerY(player, event.getRightClicked().getLocation())) return;
     	if(instance.getPlayerMain().checkPermPlayer(player, "scs.bypass")) return;
 		WorldMode mode = instance.getSettings().getWorldMode(event.getRightClicked().getLocation().getWorld().getName());
 		Chunk chunk = event.getRightClicked().getLocation().getChunk();
@@ -1468,6 +1480,7 @@ public class ClaimEvents implements Listener {
                 if (damager instanceof Player) {
                 	Claim claim = instance.getMain().getClaim(chunk);
                 	Player player = (Player) damager;
+                	if(isBelowPlayerY(player, entity.getLocation())) return;
                 	if(instance.getPlayerMain().checkPermPlayer(player, "scs.bypass")) return;
                     if (!claim.getPermissionForPlayer("Destroy", player)) {
                     	instance.getMain().sendMessage(player,instance.getLanguage().getMessage("destroy"), instance.getSettings().getSetting("protection-message"));
@@ -1547,6 +1560,7 @@ public class ClaimEvents implements Listener {
         Entity entity = event.getEntered();
         if (entity instanceof Player) {
             Player player = (Player) entity;
+            if(isBelowPlayerY(player, event.getVehicle().getLocation())) return;
             if(instance.getPlayerMain().checkPermPlayer(player, "scs.bypass")) return;
             WorldMode mode = instance.getSettings().getWorldMode(player.getLocation().getWorld().getName());
             Entity vehicle = event.getVehicle();
@@ -1576,6 +1590,7 @@ public class ClaimEvents implements Listener {
 
         if (entity.getType() == EntityType.PLAYER && block.getType() == Material.FARMLAND) {
             Player player = (Player) entity;
+            if(isBelowPlayerY(player, block.getLocation())) return;
             Chunk chunk = block.getLocation().getChunk();
             WorldMode mode = instance.getSettings().getWorldMode(player.getLocation().getWorld().getName());
             if (instance.getMain().checkIfClaimExists(chunk)) {
@@ -1606,6 +1621,10 @@ public class ClaimEvents implements Listener {
      * @param entity The entity to check.
      * @return true if the entity is a hostile mob.
      */
+    private boolean isBelowPlayerY(Player player, Location loc) {
+        return loc.getBlockY() < player.getLocation().getBlockY() - 16;
+    }
+
     private boolean isHostileMob(Entity entity) {
         return entity instanceof Monster
             || entity instanceof Phantom
@@ -1681,6 +1700,7 @@ public class ClaimEvents implements Listener {
      * @param event the entity damage by entity event.
      */
     private void processDamageByPlayer(Player player, Chunk chunk, EntityDamageByEntityEvent event) {
+        if(isBelowPlayerY(player, event.getEntity().getLocation())) return;
         if(instance.getPlayerMain().checkPermPlayer(player, "scs.bypass")) return;
         Claim claim = instance.getMain().getClaim(chunk);
         if(!claim.getPermissionForPlayer("Damages", player)) {

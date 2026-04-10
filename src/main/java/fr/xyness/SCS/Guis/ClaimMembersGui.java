@@ -96,6 +96,7 @@ public class ClaimMembersGui implements InventoryHolder {
 	    	// Get player data
 	    	String playerName = player.getName();
 	        CPlayer cPlayer = instance.getPlayerMain().getCPlayer(player.getUniqueId());
+	        if (cPlayer == null) return false;
 	        
 	        // Get claim data
 	        Set<String> members = instance.getMain().convertUUIDSetToStringSet(claim.getMembers());

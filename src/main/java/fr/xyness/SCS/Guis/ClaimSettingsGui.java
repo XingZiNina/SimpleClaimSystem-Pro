@@ -105,6 +105,7 @@ public class ClaimSettingsGui implements InventoryHolder {
     	
 	    	// Get player data
 	        CPlayer cPlayer = instance.getPlayerMain().getCPlayer(player.getUniqueId());
+	        if (cPlayer == null) return false;
 	        
 	        // Update player data (gui)
 	        cPlayer.setClaim(claim);

@@ -87,6 +87,7 @@ public class ClaimsGui implements InventoryHolder {
     	
 	    	// Get player data
 	        CPlayer cPlayer = instance.getPlayerMain().getCPlayer(player.getUniqueId());
+	        if (cPlayer == null) return false;
 	        
 	        // Get claims data
 	        Map<String, Integer> owners = getOwnersByFilter(filter);

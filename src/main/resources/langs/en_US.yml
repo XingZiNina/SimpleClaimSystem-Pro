@@ -261,8 +261,8 @@ add-chunk-already-owner-protected-area: |
   §fThis is already a protected area.
   §fUse §d/parea merge %claim-name% %claim-name-1%§f to merge them.
 add-chunk-already-in-claim-protected-area: "§cThis chunk already belongs to the protected area '%claim-name%'."
-chunk-are-loading: "§fCalculation and loading of §b%chunks-count% chunks§f.."
-chunk-while-loading: "§fChunks loaded: §a%loaded-chunks%§2/%chunks-count%§f."
+chunk-are-loading: "§8◈ §fPreparing §b%chunks-count% chunks§8…"
+chunk-while-loading: "§8◈ §fProgress §b%loaded-chunks%§8/§b%chunks-count%§8"
 griefprevention-needed: "§cYou need GriefPrevention to import claims from this plugin."
 xclaims-needed: "§cYou need to copy the claims file from XClaims into plugins/SimpleClaimSystem/ folder."
 player-not-in-the-claim: "§cThe player '%player%' is not in your claim %claim-name%."

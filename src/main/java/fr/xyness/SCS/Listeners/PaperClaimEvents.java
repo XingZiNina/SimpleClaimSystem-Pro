@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.WeatherType;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -43,6 +44,10 @@ public class PaperClaimEvents implements Listener {
      */
     public PaperClaimEvents(SimpleClaimSystem instance) {
     	this.instance = instance;
+    }
+
+    private boolean isBelowPlayerY(Player player, Location loc) {
+        return loc.getBlockY() < player.getLocation().getBlockY() - 16;
     }
     
     
@@ -117,6 +122,7 @@ public class PaperClaimEvents implements Listener {
     public void onPlayerPickupItem(PlayerAttemptPickupItemEvent event) {
     	Chunk chunk = event.getItem().getLocation().getChunk();
     	Player player = event.getPlayer();
+    	if(isBelowPlayerY(player, event.getItem().getLocation())) return;
     	WorldMode mode = instance.getSettings().getWorldMode(player.getWorld().getName());
     	if(instance.getPlayerMain().checkPermPlayer(player, "scs.bypass")) return;
 		if(instance.getMain().checkIfClaimExists(chunk)) {

@@ -18,3 +18,7 @@ Thumbs.db
 
 # Local Gradle settings
 local.properties
+
+# Local release artifacts
+release/
+libs/
